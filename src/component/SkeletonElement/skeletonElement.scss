@@ -1,0 +1,150 @@
+@import '../../scss/mixin';
+@import '../../scss/variables';
+
+$shine-color: rgba(255,255,255,0.2);
+$animation-duration: 5s;
+$easing-function: ease-in-out;
+$iteration-count: infinite;
+
+@mixin background-gradient {
+  background-image: linear-gradient(270deg, #333, rgba(#424242, 0.2), rgba(#424242, 0.2), #333);
+  background-size: 400% 100%;
+  border-radius: 5px;
+}
+
+.Skeleton {
+  background-color: rgba(#6d6d6e, 0.8);
+  margin: 10px 0;
+  border-radius: 4px;
+
+  &__inline {
+    display: inline-flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  &.title {
+    width: 70%;
+    height: 35px;
+    margin-bottom: 15px;
+    @include background-gradient;
+    animation: shine $animation-duration $easing-function $iteration-count;
+
+    @include mq('md') {
+      width: 55%;
+    }
+
+    @include mq('lg') {
+      width: 25%;
+      height: 40px;
+      margin-bottom: 20px;
+    }
+  }
+
+
+  &.button {
+    display: inline-block;
+    width: 20%;
+    height: 40px;
+    margin-bottom: 15px;
+    margin-right: 15px;
+    @include background-gradient;
+    animation: shine $animation-duration $easing-function $iteration-count;
+
+    @include mq('lg') {
+      width: 10%;
+      height: 45px;
+      margin-bottom: 20px;
+    }
+  }
+
+  &.text {
+    width: 90%;
+    height: 15px;
+    @include background-gradient;
+    animation: shine $animation-duration $easing-function $iteration-count;
+
+    @include mq('md') {
+      width: 70%;
+    }
+
+    @include mq('lg') {
+      width: 40%;
+      height: 20px;
+    }
+  }
+
+  &__Page {
+    .title {
+      width: 45%;
+
+      @include mq('sm') {
+        width: 35%;
+      }
+      @include mq('md') {
+        width: 33%;
+      }
+      @include mq('lg') {
+        width: 25%;
+      }
+    }
+  }
+
+  &.poster {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    min-height: 110px;
+    background-color: #2d2d2d;
+    white-space: normal;
+    vertical-align: top;
+    border-left: 2px solid $black;
+    border-right: 2px solid $black;
+    margin-bottom: 4vw;
+    border-radius: 5px;
+    animation: 2.5s $easing-function 0s pulse $iteration-count;
+    transition: background-color 0.1s $easing-function;
+
+    @include mq(330px) {
+      width: 50%;
+      min-height: 130px;
+    }
+    @include mq(625px) {
+      width: 33.3%;
+      min-height: 150px;
+    }
+    @include mq(998px) {
+      width: 25%;
+    }
+    @include mq(1378px) {
+      width: 16.6%;
+    }
+  }
+
+  @for $i from 1 through 6 {
+    &.poster {
+      &:nth-child(#{$i}) {
+        animation-delay: $i * (2.5s / 18);
+      }
+    }
+  }
+}
+
+@keyframes shine {
+  0% {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes pulse {
+  25% {
+    background-color: $shine-color;
+  }
+
+  50% {
+    background-color: #2d2d2d;
+  }
+}

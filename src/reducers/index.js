@@ -20,22 +20,24 @@ export const reducer = (state = INITIAL_STATE, action) => {
         isPlaying: action.payload
       };
     case CHANGETRACK:
+      console.log(JSON.parse(window.localStorage.getItem("currentTracksinPlayLists")));
+      var jsonList = JSON.parse(window.localStorage.getItem("currentTracksinPlayLists"));
       return {
         ...state,
         trackData: {
           ...state.trackData,
           trackKey: action.payload,
           track: `${
-            PLAYLIST[action.payload[0]].playlistData[action.payload[1]].link
+            jsonList[action.payload[1]].media_preview_url.replace('preview.saavncdn.com', 'aac.saavncdn.com').replace('_96_p', '_320')
           }`,
           trackName: `${
-            PLAYLIST[action.payload[0]].playlistData[action.payload[1]].songName
+            jsonList[action.payload[1]].song
           }`,
           trackImg: `${
-            PLAYLIST[action.payload[0]].playlistData[action.payload[1]].songimg
+            jsonList[action.payload[1]].image
           }`,
           trackArtist: `${
-            PLAYLIST[action.payload[0]].playlistData[action.payload[1]].songArtist
+            jsonList[action.payload[1]].singers
           }`
         }
       };

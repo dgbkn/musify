@@ -3,6 +3,11 @@ import { BrowserRouter as Router,
   Switch,
   Route
 } from "react-router-dom";
+import { connect } from 'react-redux';
+
+import { AnimatePresence } from "framer-motion";
+import { changePlay } from './actions';
+
 import useWindowSize from './hooks/useWindowSize';
 import Sidebar from './component/sidebar/sidebar';
 import MobileNavigation from './component/sidebar/mobile-navigation';
@@ -13,12 +18,19 @@ import Library from './pages/library';
 import PlaylistPage from './pages/playlist';
 
 import CONST from './constants/index';
-import { PLAYLIST } from './data/index';
+// import { PLAYLIST } from './data/index';
 import styles from './style/App.module.css';
 
-function App() {
+function App(props) {
   const size = useWindowSize();
-
+  document.body.onkeyup = function(e) {
+    if (e.key == " " ||
+        e.code == "Space" ||      
+        e.keyCode == 32      
+    ) {
+      props.changePlay(!props.isPlaying)    
+    }
+  }
   return (
         <Router>
         <div className={styles.layout}>
@@ -26,6 +38,9 @@ function App() {
             ? <Sidebar /> 
             : <MobileNavigation />
           }
+
+<AnimatePresence exitBeforeEnter>
+
           <Switch>
             <Route exact path="/">
                 <Home />
@@ -40,10 +55,21 @@ function App() {
                 <PlaylistPage />
             </Route>
           </Switch>
+          </AnimatePresence>
+
           <Footer />
         </div>
       </Router>
   );
 }
 
-export default App;
+// export default App;
+
+const mapStateToProps = (state) => {
+	return {
+		isPlaying: state.isPlaying,
+        trackData: state.trackData
+	};
+};
+  
+export default connect(mapStateToProps, { changePlay })(App);

@@ -12,27 +12,27 @@ function PlaylistCardM(props) {
 	const[isthisplay, setIsthisPlay] = useState(false)
 
 	useEffect(() => {
-		setIsthisPlay(parseInt(props.data.index) === props.trackData.trackKey[0])
+		setIsthisPlay(parseInt(props.data.id) === props.trackData.trackKey[0])
 	})
 
 	return (
 		<div className={styles.PlaylistCardSBox}>
-			<Link to={`/playlist/${props.data.link}`}>
+			<Link to={`/playlist/${props.data.id}`}>
 				<div className={styles.PlaylistCardS}>
 					<div className={styles.ImgBox}>
-						<img src={props.data.imgUrl} alt={props.data.title} />
+						<img src={props.data.image} alt={props.data.title} />
 					</div>
 					<div className={styles.Title}>
 						<TextBoldL>{props.data.title}</TextBoldL>
-						<TextRegularM>{props.data.artist}</TextRegularM>
+						<TextRegularM>{props.data.subtitle}</TextRegularM>
 					</div>
 				</div>
 			</Link>
 			<div 
-				onClick={() => props.changeTrack([parseInt(props.data.index), 0])} 
+			//  onClick={() => props.changeTrack([parseInt(props.data.id), 0])} 
 				className={`${styles.IconBox} ${isthisplay&&props.isPlaying ? styles.ActiveIconBox : ''}`}
 			>
-				<PlayButton isthisplay={isthisplay} />
+				{/* <PlayButton isthisplay={isthisplay} /> */}
 			</div>
 		</div>
 	);

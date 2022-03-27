@@ -7,16 +7,16 @@ function PlaylistDetails({data}) {
 	return (
         <div className={styles.playlistDetails}>
             <div className={styles.imgBox}>
-                <img src={data.imgUrl} />
+                <img src={data.image} />
             </div>
             <div className={styles.textBox}>
                 <TitleS>{data.type}</TitleS>
                 <h1>{data.title}</h1>
                 <div className={styles.Artist}>
                     <figure>
-                        <img src={data.imgUrl} />
+                        <img src={data.image} />
                     </figure>
-                    <TextBoldM>{data.artist}</TextBoldM>
+                    <TextBoldM>{data.subheading}</TextBoldM>
                 </div>
             </div>
         </div>
