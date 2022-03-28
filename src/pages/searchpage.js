@@ -182,7 +182,7 @@ function SearchPage(props) {
                         <div className='theBoontySearches'>
 
                             <div className={stylesa.SectionTitle}>
-                            <div className={stylesa.SectionCards} style={{overflowY:''}}>
+                            <div className={stylesa.SectionCards} style={{overflowY:'inherit!important'}}>
 
                             {data?.playlists.data.map((item) => {
                                     item.hoverColor = generateRGBGrad();

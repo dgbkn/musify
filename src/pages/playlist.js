@@ -27,13 +27,18 @@ function PlaylistPage(props) {
 	const [isthisplay, setIsthisPlay] = useState(false);
 	const { path } = useParams();
 
-	const currentItem = JSON.parse(window.localStorage.getItem("playLists")).map((item) => {
-		if (item.id == path) { return item }
+	var currentItem = JSON.parse(window.localStorage.getItem("playLists")).filter((item) => {
+		if (item.id == path) {
+			console.log(item);
+			 return true;
+			 }
 	});
 
+	currentItem = currentItem[0];
 
 
-	var { loading, error, data: results } = useFetch(currentItem.type === 'playlist' ? endpoints.playlistDetailsBaseUrl:endpoints.albumDetailsBaseUrl, path);
+
+	var { loading, error, data: results } = useFetch(currentItem.type == "playlist" ? endpoints.playlistDetailsBaseUrl:endpoints.albumDetailsBaseUrl, path);
 
 
 	function changeBg(color) {
