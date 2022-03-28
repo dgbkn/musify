@@ -22,7 +22,7 @@ import CONST from './constants/index';
 import styles from './style/App.module.css';
 import Searchpage from './pages/searchpage';
 import Topnav from './component/topnav/topnav';
-
+import PlayTrackPage from './pages/playtrackpage';
 
 
 function App(props) {
@@ -69,8 +69,13 @@ function App(props) {
             </div>
           </Route>
             
-            <Route exact path="/playlist/:path">
+          <Route exact path="/playlist/:path">
                 <PlaylistPage />
+            </Route>
+
+                        
+            <Route exact path="/playtrack/:path">
+                <PlayTrackPage />
             </Route>
           </Switch>
           </AnimatePresence>

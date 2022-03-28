@@ -25,6 +25,7 @@ function PlaylistCardM(props) {
 					<div className={styles.Title}>
 						<TextBoldL>{props.data.title}</TextBoldL>
 						<TextRegularM>{props.data.subtitle}</TextRegularM>
+						<TextRegularM>{props.data.type}</TextRegularM>
 					</div>
 				</div>
 			</Link>
