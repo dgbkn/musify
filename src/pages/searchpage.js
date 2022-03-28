@@ -127,7 +127,7 @@ function SearchPage(props) {
                         </div>
                         <div className={styles.Title} style={{margin:'3px',color: 'white'}}>
                             <TextBoldL>{data.title}</TextBoldL>
-                           <div style={{marginTop:'-8px'}}> {data.more_info.singers} </div>
+                           <div style={{marginTop:'-8px'}}> {data.more_info.singers.substring(0,24)}... </div>
                         </div>
                     </div>
                 </Link>
