@@ -31,7 +31,7 @@ function SearchBox({onChange,searchval}) {
         setSearchInput(value);
         
         if (value.length > 0) {
-            history.push(`/search/${encodeURIComponent(value)}`);
+            history.push(`/search?query=${encodeURIComponent(value)}`);
         } else { history.push(`/search/`);}
     };
 

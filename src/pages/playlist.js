@@ -1,6 +1,6 @@
 import { useParams } from 'react-router';
 import { connect } from 'react-redux';
-import { changeTrack,changePlay } from '../actions';
+import { changeTrack, changePlay } from '../actions';
 import Topnav from '../component/topnav/topnav';
 import TextRegularM from "../component/text/text-regular-m";
 import PlayButton from '../component/buttons/play-button';
@@ -15,7 +15,7 @@ import styles from './playlist.module.css';
 import { useEffect, useState } from 'react';
 import SkeletonPage from "../component/SkeletonPage/SkeletonPage";
 
-import {generateRGBGrad} from '../utils';
+import { generateRGBGrad } from '../utils';
 
 
 import useFetch from '../hooks/useFetch';
@@ -27,7 +27,13 @@ function PlaylistPage(props) {
 	const [isthisplay, setIsthisPlay] = useState(false);
 	const { path } = useParams();
 
-	var { loading, error, data: results } = useFetch(endpoints.playlistDetailsBaseUrl, path);
+	const currentItem = JSON.parse(window.localStorage.getItem("playLists")).map((item) => {
+		if (item.id == path) { return item }
+	});
+
+
+
+	var { loading, error, data: results } = useFetch(currentItem.type === 'playlist' ? endpoints.playlistDetailsBaseUrl:endpoints.albumDetailsBaseUrl, path);
 
 
 	function changeBg(color) {
@@ -39,21 +45,21 @@ function PlaylistPage(props) {
 	})
 
 
-    if(results){
-        window.localStorage.setItem("currentTracksinPlayLists",JSON.stringify(results?.songs) 
-        );
-    }
+	if (results) {
+		window.localStorage.setItem("currentTracksinPlayLists", JSON.stringify(results?.songs)
+		);
+	}
 
 
-    if(results){
-        window.localStorage.setItem("currentplaylist",JSON.stringify(results) 
-        );
-    }
+	if (results) {
+		window.localStorage.setItem("currentplaylist", JSON.stringify(results)
+		);
+	}
 
 
 
 	return (
-        <>
+		<>
 
 			{loading &&
 				<>  <SkeletonPage />
@@ -83,13 +89,12 @@ function PlaylistPage(props) {
 
 									<div className={styles.PlaylistIcons}>
 										<button
-											onClick={() =>
-												{
-												 props.changeTrack([JSON.parse(window.localStorage.getItem("playLists")),0]);
-												 props.changePlay(true);
+											onClick={() => {
+												props.changeTrack([JSON.parse(window.localStorage.getItem("playLists")), 0]);
+												props.changePlay(true);
 
-												}
-												}
+											}
+											}
 										>
 											<PlayButton isthisplay={isthisplay} />
 										</button>
@@ -111,17 +116,18 @@ function PlaylistPage(props) {
 											return (
 												<button
 													key={song.id}
-													onClick={() => {props.changeTrack([JSON.parse(window.localStorage.getItem("playLists")),results?.songs.indexOf(song)]);
-													props.changePlay(true);
+													onClick={() => {
+														props.changeTrack([JSON.parse(window.localStorage.getItem("playLists")), results?.songs.indexOf(song)]);
+														props.changePlay(true);
 
-												}}
+													}}
 													className={styles.SongBtn}
 												>
 													<PlaylistTrack
 														data={{
 															listType: item.type,
 															song: song,
-															index:results?.songs.indexOf(song) + 1
+															index: results?.songs.indexOf(song) + 1
 														}}
 													/>
 												</button>
@@ -134,8 +140,8 @@ function PlaylistPage(props) {
 					})}
 				</div>
 			)}
-			</>
-			);
+		</>
+	);
 }
 
 
@@ -143,8 +149,8 @@ function PlaylistPage(props) {
 const mapStateToProps = (state) => {
 	return {
 		isPlaying: state.isPlaying,
-    	trackData: state.trackData,
+		trackData: state.trackData,
 	};
 };
 
-			export default connect(mapStateToProps, {changeTrack,changePlay})(PlaylistPage);
+export default connect(mapStateToProps, { changeTrack, changePlay })(PlaylistPage);

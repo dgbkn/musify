@@ -21,13 +21,83 @@ import { connect } from 'react-redux';
 import { useState } from 'react';
 import * as Icons from '../component/icons';
 import SkeletonPage from '../component/SkeletonPage/SkeletonPage';
+import { SEARCHCARDS } from '../data/index';
+
+
 
 function SearchPage(props) {
-    var { query: search_term } = useParams();
+    // var { query: search_term } = useParams();
 
-    var { data, loading, error } = useFetch(endpoints.searchBaseUrl, search_term);
+        // var { query: search_term } = useParams();
+        const location = useLocation();
+
+    var [searchTerm,setStateTerm] = useState(new URLSearchParams(location.search).get("query"));
+
+    const [data, setData] = useState(null);
+    const [loading, setIsPending] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        setStateTerm(new URLSearchParams(location.search).get("query"));
+        const abortCont = new AbortController();
+        fetch(`https://crosdev.herokuapp.com/https://www.jiosaavn.com/api.php?${endpoints.searchBaseUrl}${encodeURIComponent(new URLSearchParams(location.search).get("query"))}`, { signal: abortCont.signal })
+            .then(res => {
+                if (!res.ok) { // error coming back from server
+                    throw Error('Could Not fetch the data for that resource');
+                }
+                return res.json();
+            })
+            .then(data => {
+                setIsPending(false);
+                console.log(data);
+                setData(data);
+                setError(null);
+            })
+            .catch(err => {
+                if (err.name === 'AbortError') {
+                    console.log('fetch aborted')
+                } else {
+                    // auto catches network / connection error
+                    setIsPending(false);
+                    setError(err.message);
+                }
+            });
+
+        // abort the fetch
+        return () => abortCont.abort();
+    }, [location])
 
 	const [playlistIndex, setPlaylistIndex] = useState(undefined);
+
+    
+    if(!searchTerm){
+        return (
+
+    
+                <div className={`${styles.Search} ${stylesa.Home}`}>
+                    <TitleM>Search</TitleM>
+                    <div className={styles.SearchCardGrid}>
+                        {SEARCHCARDS.map((card) => {
+                            return (
+                                <SearchPageCard 
+                                    key={card.title}
+                                    cardData={{
+                                        bgcolor: card.bgcolor,
+                                        title: card.title,
+                                        imgurl: card.imgurl,
+                                    }}
+                                />
+                            );
+                        })}
+                    </div>
+                </div>
+        );
+    }
+
+
+
+
+
 
     
     // useEffect(() => {
@@ -43,6 +113,7 @@ function SearchPage(props) {
 	function changeBg(color) {
 		document.documentElement.style.setProperty('--hover-home-bg', color);
 	}
+
     if(data){
         var jsond = {
             "id": "searchresults",
@@ -60,7 +131,7 @@ function SearchPage(props) {
             "explicit_content": "0",
             "mini_obj": true
         }
-        window.localStorage.setItem("playLists",JSON.stringify({...data?.playlists.data,jsond})
+        window.localStorage.setItem("playLists",JSON.stringify([...data?.playlists.data,...data?.albums.data,jsond])
         );
     }
 
@@ -95,46 +166,54 @@ function SearchPage(props) {
 
 
     return (
-        <div className={styles.SearchPage}>
-            <Topnav search={true} searchval={search_term} />
+
+
+
+
 
             <div className={styles.Search}>
-                <TitleM>Search</TitleM>
+                <TitleM>Search {`For ${searchTerm}`}</TitleM>
 
                     <div style={{ padding: '5%' }}>
-                        {/* 
-                        {data && !data.error && data.length > 0 && data.map((e, i) => {
+                    
 
-                            return (
-
-                                <div id="main-row__under_category_flex" key={i}>
-
-                                </div>
-                            );
-                        })} */}
-
-                        {data && !data.error && data.length > 0 && <>
-
+                        {data && 
+                        
+                        <div className='theBoontySearches'>
 
                             <div className={stylesa.SectionTitle}>
-                                {data?.playlists.data.map((e) => {
-                                    error.hoverColor = generateRGBGrad();
+                            <div className={stylesa.SectionCards} style={{overflowY:''}}>
+
+                            {data?.playlists.data.map((item) => {
+                                    item.hoverColor = generateRGBGrad();
+                                    item.image = item.image.replace('50x50','500x500');
                                     return (
                                         <PlaylistCardM
-                                            key={e.id}
-                                            data={e}
+                                            key={item.id}
+                                            data={item}
+                                        />
+                                    );
+
+                                })}
+
+
+                             {data?.albums.data.map((item) => {
+                                    item.hoverColor = generateRGBGrad();
+                                    item.image = item.image.replace('50x50','500x500');
+                                    return (
+                                        <PlaylistCardM
+                                            key={item.id}
+                                            data={item}
                                         />
                                     );
 
                                 })}
                             </div>
+                            </div>
 
 
-                            {/* {data.songs.map((e) => {
 
-                            })} */}
-
-                            <div onLoad={() => {
+                            {/* <div onLoad={() => {
                                 // changeBg(item.playlistBg);
                                 changeBg(generateRGBGrad());
                                 setPlaylistIndex(JSON.parse(window.localStorage.getItem("playLists")).indexOf(JSON.parse(window.localStorage.getItem("currentplaylist"))))
@@ -171,11 +250,16 @@ function SearchPage(props) {
                                         );
                                     })}
                                 </div>
-                            </div>
+                            </div> */}
 
 
 
-                        </>}
+                        </div>
+                        
+                        }
+
+
+
                         {loading && <SkeletonPage />}
                         {error && <div className='Category__subtitle'>Oops, an error occurred.</div>}
                         {data && data.error && <div className='Category__subtitle'>{data.error}</div>}
@@ -183,7 +267,6 @@ function SearchPage(props) {
 
                     </div>
             </div>
-        </div>
     );
 }
 

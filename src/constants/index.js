@@ -18,12 +18,12 @@ export const MENU = [
     icon: <Icon.Search />,
     iconSelected: <Icon.SearchActive />
   },
-  {
-    title: 'Library',
-    path: '/library',
-    icon: <Icon.Library />,
-    iconSelected: <Icon.LibraryActive />
-  }
+  // {
+  //   title: 'Library',
+  //   path: '/library',
+  //   icon: <Icon.Library />,
+  //   iconSelected: <Icon.LibraryActive />
+  // }
 ]
 
 export const PLAYLISTBTN = [

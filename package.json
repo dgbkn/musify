@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^12.8.0",
     "axios": "^0.21.0",
     "framer-motion": "^4.1.17",
+    "qs": "^6.10.3",
     "random-gradient": "^0.0.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
