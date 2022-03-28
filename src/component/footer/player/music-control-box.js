@@ -3,11 +3,35 @@ import { changeTrack } from '../../../actions';
 import * as Icons from '../../icons';
 import IconButton from '../../buttons/icon-button';
 import PlayButton from '../../buttons/play-button';
-
+import axios from 'axios';
 import { PLAYLIST as PLAYLISTOLD } from "../../../data/index";
 import styles from "./music-control-box.module.css";
+import { useState } from 'react';
+
+
+
 
 function MusicControlBox(props) {
+
+    const [isDownloading,setisDownloading] = useState(false);
+
+    const downloadFile = (url, fileName) => {
+        setisDownloading(true);
+        axios({
+        url,
+          method: 'GET',
+          responseType: 'blob',
+        }).then((response) => {
+            setisDownloading(false);
+          const blobbedResponse = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement('a');
+          link.href = blobbedResponse;
+          link.setAttribute('download', fileName);
+          document.body.appendChild(link);
+          link.click();
+        });
+      }
+
 
     var PLAYLIST = JSON.parse(window.localStorage.getItem("playLists"));
     var PLAYLISTCURRECT = JSON.parse(window.localStorage.getItem("currentplaylist"));
@@ -35,10 +59,11 @@ function MusicControlBox(props) {
     return (
         <div className={styles.musicControl}>
 
-            <a className={styles.button} download={`${( !SONGS ? PLAYLISTOLD[0].playlistData[props.trackData.trackKey[1]].songName : SONGS[props.trackData.trackKey[1]].song).replace(" ","_")}_by_dev.mp3`}  href={
-               !SONGS ? PLAYLISTOLD[0].playlistData[props.trackData.trackKey[1]].link : SONGS[props.trackData.trackKey[1]].media_preview_url.replace('preview.saavncdn.com', 'aac.saavncdn.com').replace('_96_p', '_320')}  target={'_blank'}>
-                <Icons.DownloadApp />
-            </a>
+            <button className={styles.button} 
+                   onClick={()=>downloadFile(`https://thawing-scrubland-27252.herokuapp.com/api?uri=${!SONGS ? PLAYLISTOLD[0].playlistData[props.trackData.trackKey[1]].link : SONGS[props.trackData.trackKey[1]].media_preview_url.replace('preview.saavncdn.com', 'aac.saavncdn.com').replace('_96_p', '_320')}`,`${( !SONGS ? PLAYLISTOLD[0].playlistData[props.trackData.trackKey[1]].songName : SONGS[props.trackData.trackKey[1]].song).replace(" ","_")}_by_dev.mp3`)}
+               >
+                {isDownloading ? <div id="loader" className={styles.nfLoader}></div> : <Icons.DownloadApp />}
+            </button>
 
 
 

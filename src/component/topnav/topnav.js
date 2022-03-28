@@ -5,14 +5,14 @@ import LibraryTabBtn from './library-tab-btn';
 
 import styles from './topnav.module.css';
 
-function Topnav({search = false, tabButtons = false}) {
+function Topnav({search = false, tabButtons = false,searchval=""}) {
     return (
       <nav className={styles.Topnav}>
           <div>
                 <span>
                     <PrevPageBtn />
                     <NextPageBtn />
-                    { search ? <SearchBox /> : '' }
+                    { search ? <SearchBox searchval={searchval}/> : '' }
                     { tabButtons ? <LibraryTabBtn /> : '' }
                 </span>
                 <span>

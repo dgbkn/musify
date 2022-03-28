@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 
-const BASE_API_URL = "https://thawing-scrubland-27252.herokuapp.com/api?uri=https://www.jiosaavn.com/api.php?";
+// const BASE_API_URL = "https://thawing-scrubland-27252.herokuapp.com/api?uri=https://www.jiosaavn.com/api.php?";
+
+const BASE_API_URL = "https://crosdev.herokuapp.com/https://www.jiosaavn.com/api.php?";
 
 
 const useFetch = (part,query="") => {
@@ -11,7 +13,9 @@ const useFetch = (part,query="") => {
     useEffect(() => {
         const abortCont = new AbortController();
 
-        fetch(`${BASE_API_URL}${encodeURIComponent(part)}${encodeURIComponent(query)}`, { signal: abortCont.signal })
+        // fetch(`${BASE_API_URL}${encodeURIComponent(part)}${encodeURIComponent(query)}`, { signal: abortCont.signal })
+
+        fetch(`${BASE_API_URL}${part}${encodeURIComponent(query)}`, { signal: abortCont.signal })
             .then(res => {
                 if (!res.ok) { // error coming back from server
                     throw Error('Could Not fetch the data for that resource');

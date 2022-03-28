@@ -13,6 +13,9 @@ var endpoints = {
     '__call=webapi.get&type=playlist&p=1&n=50&includeMetaTags=0&ctx=wap6dot0&api_version=4&_format=json&_marker=0',
     homenewPlaylists:
     '__call=content.getFeaturedPlaylists&fetch_from_serialized_files=true&p=1&n=50&api_version=4&_format=json&_marker=0&ctx=web6dot0',
+    homegetCharts:
+    '__call=content.getCharts&fetch_from_serialized_files=true&p=1&n=50&api_version=4&_format=json&_marker=0&ctx=web6dot0',
+    searchData:'p=1&_format=json&_marker=0&api_version=4&ctx=wap6dot0&n=10&__call=search.getResults&q='
 
 }
 

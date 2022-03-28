@@ -29,7 +29,7 @@ function Playlist() {
 
         <hr className={styles.hr}/>
 
-        <div>
+        {/* <div>
           {PLAYLIST.filter((item) => item.type === 'playlist').map((list) => {
             return (
               <Link to={`/playlist/${list.link}`} key={list.title}>
@@ -37,7 +37,7 @@ function Playlist() {
               </Link>
             );
           })}
-        </div>
+        </div> */}
       </div>
     );
 }

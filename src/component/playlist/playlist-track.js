@@ -5,7 +5,7 @@ import TextBoldL from "../text/text-bold-l";
 import TextRegularM from "../text/text-regular-m";
 import Playgif from '../../image/now-play.gif';
 import * as Icons from '../icons';
-
+import convertTime from '../../functions/convertTime';
 import styles from "./playlist-track.module.css";
 
 function PlaylistTrack(props) {
@@ -33,17 +33,6 @@ function unEscape(htmlStr) {
     return htmlStr;
 }
 
-function secondsToHms(d) {
-    d = Number(d);
-    var h = Math.floor(d / 3600);
-    var m = Math.floor(d % 3600 / 60);
-    var s = Math.floor(d % 3600 % 60);
-
-    var hDisplay = h > 0 ? h+":": "";
-    var mDisplay = m > 0 ? m +":": "00:";
-    var sDisplay = s > 0 ? s + "" : "00";
-    return hDisplay + mDisplay + sDisplay; 
-}
 
 
 	return (
@@ -77,7 +66,7 @@ function secondsToHms(d) {
 				<TextRegularM>{props.data.song.singers}</TextRegularM>
 			</span>
 
-			<p>{secondsToHms(props.data.song.duration)}</p>
+			<p>{convertTime(props.data.song.duration)}</p>
 		</div>
 	);
 }

@@ -20,6 +20,7 @@ import PlaylistPage from './pages/playlist';
 import CONST from './constants/index';
 // import { PLAYLIST } from './data/index';
 import styles from './style/App.module.css';
+import Searchpage from './pages/searchpage';
 
 function App(props) {
   const size = useWindowSize();
@@ -45,12 +46,18 @@ function App(props) {
             <Route exact path="/">
                 <Home />
             </Route>
-            <Route path="/search">
-                <Search />
-            </Route>
+
             <Route path="/library">
                 <Library />
             </Route>
+            <Route exact path="/search/:query">
+            <Searchpage />
+          </Route>
+
+          <Route path="/search">
+                <Search />
+            </Route>
+            
             <Route exact path="/playlist/:path">
                 <PlaylistPage />
             </Route>

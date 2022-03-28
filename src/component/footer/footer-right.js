@@ -9,7 +9,7 @@ function FooterRight({ volume, setVolume }){
     return (
         <div className={styles.footerRight}>
             <IconButton icon={<Icons.Mix />} activeicon={<Icons.Mix />}/>
-            <IconButton icon={<Icons.DownloadApp />} activeicon={<Icons.DownloadApp />}/>
+            {/* <IconButton icon={<Icons.DownloadApp />} activeicon={<Icons.DownloadApp />}/> */}
             <SoundLevel volume={volume} setVolume={setVolume} />
         </div>
     );
