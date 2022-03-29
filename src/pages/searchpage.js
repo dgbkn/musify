@@ -93,7 +93,20 @@ function SearchPage(props) {
                     "explicit_content": "0",
                     "mini_obj": true
                 }
-                window.localStorage.setItem("playLists", JSON.stringify([...data?.playlists.data, ...data?.albums.data, jsond])
+                window.localStorage.setItem("playLists", JSON.stringify([...data?.playlists.data, ...data?.albums.data, 
+                    ...data?.artists.data.map((item) => {
+                        item.hoverColor = generateRGBGrad();
+                        item.image = item.image.replace('50x50', '500x500');
+
+                        item.type = "artist";
+                        item.title = item.name;
+                        item.subtitle = `Followers: ${item.follower_count}`;
+                        item.id = item.perma_url.split('/');
+                        item.id = item.id[item.id.length - 1];
+                        return item;
+
+                    }),
+                    jsond])
                 );
             }
         
@@ -253,6 +266,27 @@ function SearchPage(props) {
                                 {data?.albums.data.map((item) => {
                                     item.hoverColor = generateRGBGrad();
                                     item.image = item.image.replace('50x50', '500x500');
+                                    return (
+                                        <PlaylistCardM
+                                            key={item.id}
+                                            data={item}
+                                        />
+                                    );
+
+                                })}
+
+
+                                
+
+                              {data?.artists.data.map((item) => {
+                                    item.hoverColor = generateRGBGrad();
+                                    item.image = item.image.replace('50x50', '500x500');
+
+                                    item.type = "artist";
+                                    item.title = item.name;
+                                    item.subtitle = `Followers: ${item.follower_count}`;
+                                    item.id = item.perma_url.split('/');
+                                    item.id = item.id[item.id.length - 1];
                                     return (
                                         <PlaylistCardM
                                             key={item.id}
