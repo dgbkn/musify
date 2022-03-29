@@ -4,20 +4,41 @@ import { changeTrack } from '../../actions';
 import { Link } from "react-router-dom";
 import TextBoldL from "../text/text-bold-l";
 import TextRegularM from '../text/text-regular-m';
+
+
+import useFetch from '../../hooks/useFetch';
+import endpoints from '../../endpoints';
+
+
 import PlayButton from '../buttons/play-button';
 
 import styles from "./playlist-card-m.module.css";
+import SkeletonElement from "../SkeletonElement/SkeletonElement";
 
-function PlaylistCardM(props) {
+function RadioCard(props) {
 	const[isthisplay, setIsthisPlay] = useState(false)
 
 	useEffect(() => {
 		setIsthisPlay(parseInt(props.data.id) === props.trackData.trackKey[0])
 	})
 
+    var { loading, error, data } = useFetch(endpoints.getDefaultStationofRadio(props.data.more_info.language,props.data.id)); 
+
+
 	return (
+        <>
+                    {loading &&
+                <>  <SkeletonElement />
+                </>
+
+            }
+            {error && <div className="errored">Oops, an error occurred.</div>}
+
+            {!loading && data && (
+
+
 		<div className={styles.PlaylistCardSBox}>
-			<Link to={`/playlist/?id=${props.data.id}&type=${props.data?.type}`}>
+			<Link to={`/playlist/?id=${encodeURIComponent(props.data.id)}&defaultStation=${encodeURIComponent(data?.stationid)}&type=${props.data?.type}`}>
 				<div className={styles.PlaylistCardS}>
 					<div className={styles.ImgBox}>
 						<img src={props.data.image} alt={props.data.title} />
@@ -36,6 +57,9 @@ function PlaylistCardM(props) {
 				{/* <PlayButton isthisplay={isthisplay} /> */}
 			</div>
 		</div>
+            )}
+        </>
+
 	);
 }
 
@@ -46,4 +70,4 @@ const mapStateToProps = (state) => {
 	};
 };
   
-export default connect(mapStateToProps, { changeTrack })(PlaylistCardM);
+export default connect(mapStateToProps, { changeTrack })(RadioCard);

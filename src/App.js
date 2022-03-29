@@ -16,7 +16,7 @@ import Home from './pages/home';
 import Search from './pages/search';
 import Library from './pages/library';
 import PlaylistPage from './pages/playlist';
-
+import Fallback from './pages/fallback';
 import CONST from './constants/index';
 // import { PLAYLIST } from './data/index';
 import styles from './style/App.module.css';
@@ -69,7 +69,7 @@ function App(props) {
             </div>
           </Route>
             
-          <Route exact path="/playlist/:path">
+          <Route exact path="/playlist">
                 <PlaylistPage />
             </Route>
 
@@ -77,6 +77,20 @@ function App(props) {
             <Route exact path="/playtrack/:path">
                 <PlayTrackPage />
             </Route>
+
+            <Route exact path="/fallback">
+            <Fallback type={'201'} />
+          </Route>
+
+          <Route path="">
+            <Fallback type={'404'} />
+          </Route>
+
+          <Route path="*">
+            <Fallback type={'404'} />
+          </Route>
+
+
           </Switch>
           </AnimatePresence>
 

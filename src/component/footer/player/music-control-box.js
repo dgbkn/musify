@@ -60,7 +60,7 @@ function MusicControlBox(props) {
         <div className={styles.musicControl}>
 
             <button className={styles.button} 
-                   onClick={()=>downloadFile(`https://thawing-scrubland-27252.herokuapp.com/api?uri=${!SONGS ? PLAYLISTOLD[0].playlistData[props.trackData.trackKey[1]].link : SONGS[props.trackData.trackKey[1]].media_preview_url.replace('preview.saavncdn.com', 'aac.saavncdn.com').replace('_96_p', '_320')}`,`${( !SONGS ? PLAYLISTOLD[0].playlistData[props.trackData.trackKey[1]].songName : SONGS[props.trackData.trackKey[1]].song).replace(" ","_")}_by_dev.mp3`)}
+                   onClick={()=>downloadFile(`https://thawing-scrubland-27252.herokuapp.com/api?uri=${encodeURIComponent(!SONGS ? PLAYLISTOLD[0].playlistData[props.trackData.trackKey[1]].link : SONGS[props.trackData.trackKey[1]].media_preview_url.replace('preview.saavncdn.com', 'aac.saavncdn.com').replace('_96_p', '_320'))}`,`${( !SONGS ? PLAYLISTOLD[0].playlistData[props.trackData.trackKey[1]].songName : SONGS[props.trackData.trackKey[1]].song).replace(" ","_")}_by_dev.mp3`)}
                >
                 {isDownloading ? <div id="loader" className={styles.nfLoader}></div> : <Icons.DownloadApp />}
             </button>

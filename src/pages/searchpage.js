@@ -25,6 +25,7 @@ import SkeletonPage from '../component/SkeletonPage/SkeletonPage';
 import { SEARCHCARDS } from '../data/index';
 import { Link } from 'react-router-dom';
 import styles_playlist_card_s from "../component/cards/playlist-card-s.module.css";
+import PlaylistTrackIncomplete from '../component/playlist/playlist_track_incomplete';
 
 
 function SearchPage(props) {
@@ -65,12 +66,76 @@ function SearchPage(props) {
                 }
             });
 
-        // abort the fetch
+            // abort the fetch
         return () => abortCont.abort();
     }, [location])
 
     const [playlistIndex, setPlaylistIndex] = useState(undefined);
 
+    
+        useEffect(() => {
+            console.log(data,"is data",data?.length)
+
+            if (data) {
+                var jsond = {
+                    "id": "searchresults",
+                    "title": "Search results",
+                    "subtitle": "Just Updated",
+                    "type": "playlist",
+                    "image": "https://pics.freeicons.io/uploads/icons/png/7795702121539683258-512.png",
+                    "more_info": {
+                        "song_count": data?.songs?.data.length,
+                        "firstname": "JioSaavn",
+                        "follower_count": "7592",
+                        "last_updated": "1648364494",
+                        "uid": "phulki_user"
+                    },
+                    "explicit_content": "0",
+                    "mini_obj": true
+                }
+                window.localStorage.setItem("playLists", JSON.stringify([...data?.playlists.data, ...data?.albums.data, jsond])
+                );
+            }
+        
+        
+            
+        
+            if (data) {
+                window.localStorage.setItem("currentTracksinPlayLists", JSON.stringify(data?.songs.data)
+                );
+            }
+        
+            if (data) {
+                window.localStorage.setItem("searchResultsTracks", JSON.stringify(data?.songs.data)
+                );
+            }
+        
+            if (data) {
+                var jsond = {
+                    "id": "searchresults",
+                    "title": "Search results",
+                    "subtitle": "Just Updated",
+                    "type": "playlist",
+                    "image": "https://pics.freeicons.io/uploads/icons/png/7795702121539683258-512.png",
+                    "more_info": {
+                        "song_count": data?.songs?.data.length,
+                        "firstname": "JioSaavn",
+                        "follower_count": "7592",
+                        "last_updated": "1648364494",
+                        "uid": "phulki_user"
+                    },
+                    "explicit_content": "0",
+                    "mini_obj": true
+                }
+        
+                window.localStorage.setItem("currentplaylist", JSON.stringify(jsond)
+                );
+            }
+            
+            return () => {
+    
+            }
+        }, [data])
 
     if (!searchTerm) {
         return (
@@ -102,14 +167,6 @@ function SearchPage(props) {
 
 
 
-    // useEffect(() => {
-    //     console.log(data,"is data",data?.length)
-    //     console.log(search_term)
-    //     return () => {
-
-    //     }
-    // }, [data])
-
 
 
     function changeBg(color) {
@@ -117,77 +174,25 @@ function SearchPage(props) {
     }
 
 
-    function getSongCard(data) {
-        return (
-            <div className={styles_playlist_card_s.PlaylistCardSBox} style={{margin:'3px',height:'100px'}}>
-                <Link to={`/playtrack/${data.id}`} >
-                    <div className={styles_playlist_card_s.PlaylistCardS}>
-                        <div className={styles_playlist_card_s.ImgBox}>
-                            <img src={data.image} alt={`${data.title}`} />
-                        </div>
-                        <div className={styles.Title} style={{margin:'3px',color: 'white'}}>
-                            <TextBoldL>{data.title}</TextBoldL>
-                           <div style={{marginTop:'-8px'}}> {data.more_info.singers} </div>
-                        </div>
-                    </div>
-                </Link>
-            </div>
-        );
-    }
-
-    if (data) {
-        var jsond = {
-            "id": "searchresults",
-            "title": "Search results",
-            "subtitle": "Just Updated",
-            "type": "playlist",
-            "image": "https://pics.freeicons.io/uploads/icons/png/7795702121539683258-512.png",
-            "more_info": {
-                "song_count": data?.songs?.data.length,
-                "firstname": "JioSaavn",
-                "follower_count": "7592",
-                "last_updated": "1648364494",
-                "uid": "phulki_user"
-            },
-            "explicit_content": "0",
-            "mini_obj": true
-        }
-        window.localStorage.setItem("playLists", JSON.stringify([...data?.playlists.data, ...data?.albums.data, jsond])
-        );
-    }
+    // function getSongCard(data) {
+    //     return (
+    //         <div className={styles_playlist_card_s.PlaylistCardSBox} style={{margin:'3px',height:'100px'}}>
+    //             <Link to={`/playtrack/${data.id}`} >
+    //                 <div className={styles_playlist_card_s.PlaylistCardS}>
+    //                     <div className={styles_playlist_card_s.ImgBox}>
+    //                         <img src={data.image} alt={`${data.title}`} />
+    //                     </div>
+    //                     <div className={styles.Title} style={{margin:'3px',color: 'white'}}>
+    //                         <TextBoldL>{data.title}</TextBoldL>
+    //                        <div style={{marginTop:'-8px'}}> {data.more_info.singers} </div>
+    //                     </div>
+    //                 </div>
+    //             </Link>
+    //         </div>
+    //     );
+    // }
 
 
-    if (data) {
-        window.localStorage.setItem("currentTracksinPlayLists", JSON.stringify(data?.songs.data)
-        );
-    }
-
-    if (data) {
-        window.localStorage.setItem("searchResultsTracks", JSON.stringify(data?.songs.data)
-        );
-    }
-
-    if (data) {
-        var jsond = {
-            "id": "searchresults",
-            "title": "Search results",
-            "subtitle": "Just Updated",
-            "type": "playlist",
-            "image": "https://pics.freeicons.io/uploads/icons/png/7795702121539683258-512.png",
-            "more_info": {
-                "song_count": data?.songs?.data.length,
-                "firstname": "JioSaavn",
-                "follower_count": "7592",
-                "last_updated": "1648364494",
-                "uid": "phulki_user"
-            },
-            "explicit_content": "0",
-            "mini_obj": true
-        }
-
-        window.localStorage.setItem("currentplaylist", JSON.stringify(jsond)
-        );
-    }
 
 
 
@@ -216,7 +221,14 @@ function SearchPage(props) {
 
 
                             {data?.songs.data.map((song) => {
-                                return getSongCard(song);
+                                // return getSongCard(song);
+                                return <PlaylistTrackIncomplete 
+                                data={{
+                                    listType: 'PLAYLIST',
+                                    song: song,
+                                    index: data?.songs.data.indexOf(song) + 1,
+                                }}
+                                />;
                             })}
 
 

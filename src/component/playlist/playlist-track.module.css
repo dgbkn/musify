@@ -49,3 +49,30 @@
         width: calc(100% - 8px);
     }
 }
+
+
+
+.SongBtn{
+    display: block;
+    width: 100%;
+    background: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+.SongBtn p{
+    margin: 0;
+    font-weight: 400;
+}
+.SongBtn img{
+    width: 36px;
+    height: 36px;
+}
+.SongBtn span p:last-child,
+.SongBtn p:last-child{
+    color: rgb(179, 179, 179);
+}
+@media screen and (max-width: 640px) {
+    .SongBtn{
+        padding: 0;
+    }
+}

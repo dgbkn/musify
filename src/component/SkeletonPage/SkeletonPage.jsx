@@ -4,7 +4,7 @@ import SkeletonPoster from "../SkeletonPoster/SkeletonPoster";
 
 const SkeletonPage = () => {
 	return (
-		<div className="Skeleton__Page" style={{padding:'50px'}}>
+		<div className="Skeleton__Page" style={{padding:'10px'}}>
 			<SkeletonElement type="title" />
 			<SkeletonPoster/>
 			<SkeletonPoster/>

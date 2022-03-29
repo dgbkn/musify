@@ -7,10 +7,12 @@ import Playgif from '../../image/now-play.gif';
 import * as Icons from '../icons';
 import convertTime from '../../functions/convertTime';
 import styles from "./playlist-track.module.css";
+import { useHistory } from "react-router-dom";
 
 function PlaylistTrack(props) {
     const [thisSong, setthisSong] = useState(false);
 
+    const history = useHistory();
     /*setInterval(function(){
         setthisSong(props.data.song.link == localStorage.getItem('playedSong'));
     }, 50);*/
@@ -46,7 +48,17 @@ function unEscape(htmlStr) {
         >   
             <button
                 className={styles.playBtn}
-                onClick={() => props.changePlay(!props.isPlaying)}
+                onClick={
+                    () => 
+                    {
+                        if( "media_preview_url" in props.data.song ){
+                        props.changePlay(!props.isPlaying);
+                        }else{
+                            history.push(`/playtrack/${props.data.song.id}`);
+                        }
+                    }
+                
+                }
             >
                 {thisSong 
                     ? <Icons.Pause /> 

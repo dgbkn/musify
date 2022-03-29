@@ -16,7 +16,7 @@ export default function Fallback({ type }) {
         <div>
             <Topnav tabButtons={true} />
 
-            <div style={{ padding: '5%', paddingTop: padtop }}>
+            <div style={{ padding: '5%', paddingTop: padtop,color:'white'}}>
 
 
                 {type === '404' && (<div>

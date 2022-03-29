@@ -29,32 +29,70 @@ import endpoints from '../endpoints';
 
 function PlayTrackPage(props) {
 	const [playlistIndex, setPlaylistIndex] = useState(undefined);
-	const [isthisplay, setIsthisPlay] = useState(false);
+	
+	const [playUrl, setplayUrl] = useState("");
+
+
 	const { path } = useParams();
 
 	var { loading, error, data: results } = useFetch(endpoints.songDetailsBaseUrl, path);
-
 
 	function changeBg(color) {
 		document.documentElement.style.setProperty('--hover-home-bg', color);
 	}
 
+
+
+
 	useEffect(() => {
-		setIsthisPlay(playlistIndex === props.trackData.trackKey[0])
-		if (results) {
-			window.localStorage.setItem("currentTracksinPlayLists", JSON.stringify([results[`${path}`]])
+		if (results && "encrypted_media_url" in  results[Object.keys(results)[0]]  ) {
+
+		var dfd = results[Object.keys(results)[0]]?.encrypted_media_url;
+		
+		  var uri=  endpoints.BASE_API_URL  +  endpoints.getDecrptedUrl( dfd );
+
+		  fetch(uri)
+		  .then(res => {
+			  if (!res.ok) { // error coming back from server
+				  console.log('Could Not fetch the data for that resource');
+				  return "";
+			  }
+			  return res.json();
+		  })
+		  .then(data => {
+			setplayUrl(data.auth_url);
+		  })
+		  .catch(err => {
+			  if (err.name === 'AbortError') {
+				  console.log('fetch aborted');
+			  } else {
+				console.log(err);
+			  }
+		  });
+
+		}
+	
+	}, [results]);
+
+
+	useEffect(() => {
+		if (playUrl) {
+			var sss = results[Object.keys(results)[0]];
+			sss.media_preview_url = playUrl;
+			window.localStorage.setItem("currentTracksinPlayLists", JSON.stringify([ sss ])
 			);
 			props.changeTrack([JSON.parse(window.localStorage.getItem("playLists")), 0]
 			);
+			
 			try{
 			 props.changePlay(true);
 			}catch(e){
 				console.log(e);
 			}
-	
 		}
 	
-	}, [results]);
+	}, [playUrl]);
+
 
     changeBg(generateRGBGrad());
 
@@ -65,7 +103,7 @@ function PlayTrackPage(props) {
 	return (
 		<>
 
-			{loading &&
+			{loading && !playUrl &&
 				<>  <SkeletonPage />
 				</>
 
@@ -73,7 +111,7 @@ function PlayTrackPage(props) {
 
 			{error && <div className="errored">Oops, an error occurred.</div>}
 
-			{!loading && results && (
+			{!loading && results && playUrl && (
                 <center>
 				<div className={styles.PlaylistPage}>
 					<div className={styles.gradientBg}></div>

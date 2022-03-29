@@ -18,12 +18,12 @@ export const MENU = [
     icon: <Icon.Search />,
     iconSelected: <Icon.SearchActive />
   },
-  // {
-  //   title: 'Library',
-  //   path: '/library',
-  //   icon: <Icon.Library />,
-  //   iconSelected: <Icon.LibraryActive />
-  // }
+  {
+    title: 'Library',
+    path: '/library',
+    icon: <Icon.Library />,
+    iconSelected: <Icon.LibraryActive />
+  }
 ]
 
 export const PLAYLISTBTN = [
@@ -44,6 +44,11 @@ export const LIBRARYTABS = [
     title: 'Library',
     path: '/library'
   },
+
+  {
+    title: 'Charts',
+    path: '/library/charts'
+  },
   {
     title: 'Podcasts',
     path: '/library/podcasts'
@@ -53,7 +58,7 @@ export const LIBRARYTABS = [
     path: '/library/artists'
   },
   {
-    title: 'Albums',
-    path: '/library/albums'
+    title: 'Radios',
+    path: '/library/radio'
   }
 ]

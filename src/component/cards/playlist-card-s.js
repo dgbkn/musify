@@ -20,7 +20,7 @@ function PlaylistCardS(props){
 
     return (
         <div className={styles.PlaylistCardSBox}>
-            <Link to={`/playlist/${props.data.id}`} onMouseOver={changeTheme}>
+            <Link to={`/playlist/?id=${props.data.id}&type=${props.data?.type}`} onMouseOver={changeTheme}>
                 <div className={styles.PlaylistCardS}>
                     <div className={styles.ImgBox}>
                         <img src={props.data.image} alt={`${props.data.title}`} />

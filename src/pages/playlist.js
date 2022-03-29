@@ -1,4 +1,4 @@
-import { useParams } from 'react-router';
+import { useLocation, useHistory } from 'react-router';
 import { connect } from 'react-redux';
 import { changeTrack, changePlay } from '../actions';
 import Topnav from '../component/topnav/topnav';
@@ -20,38 +20,79 @@ import { generateRGBGrad } from '../utils';
 
 import useFetch from '../hooks/useFetch';
 import endpoints from '../endpoints';
+import Fallback from './fallback';
+import PlaylistTrackIncomplete from '../component/playlist/playlist_track_incomplete';
 
 
 function PlaylistPage(props) {
 	const [playlistIndex, setPlaylistIndex] = useState(undefined);
 	const [isthisplay, setIsthisPlay] = useState(false);
-	const { path } = useParams();
 
-	var currentItem = JSON.parse(window.localStorage.getItem("playLists")).filter((item) => {
-		if (item.id == path) {
-			console.log(item);
-			 return true;
-			 }
-	});
-
-	currentItem = currentItem[0];
+	const location = useLocation();
+	const history = useHistory();
 
 
+	var id_Item = new URLSearchParams(location.search).get("id");
+	var type = new URLSearchParams(location.search).get("type");
+	var radioStation = new URLSearchParams(location.search).get("defaultStation");
 
-	var { loading, error, data: results } = useFetch(currentItem.type == "playlist" ? endpoints.playlistDetailsBaseUrl:endpoints.albumDetailsBaseUrl, path);
+	var fetch_id = radioStation ? radioStation : id_Item;
 
-
-	function changeBg(color) {
-		document.documentElement.style.setProperty('--hover-home-bg', color);
-	}
+	var { loading, error, data: results } = useFetch(endpoints.getEndpointofTypeofContent(type), fetch_id);
 
 	useEffect(() => {
 		setIsthisPlay(playlistIndex === props.trackData.trackKey[0])
 	})
 
 
+	if (!type || !id_Item) {
+		return (
+			<Fallback type={`404`} />
+		);
+	}
+
+
+	// var { loading, error, data: results } = useFetch(type == "playlist" ? endpoints.playlistDetailsBaseUrl:endpoints.albumDetailsBaseUrl, id_Item);
+
+
+
+	function changeBg(color) {
+		document.documentElement.style.setProperty('--hover-home-bg', color);
+	}
+
+
+
+	function getSongsFromData(data) {
+
+
+		console.log("DASTA",data)
+		switch (type) {
+			case 'album':
+				return data.songs;
+			case 'show':
+				return data.episodes;
+			case 'playlist':
+				return data.songs;
+			case 'artist':
+				return data.topSongs;
+			case 'radio_station':
+				delete data.stationid;
+				console.log("DASTA SONGS",data)
+
+				return Object.entries(data).map((i)=> {return i.song});
+			default:
+				return data.songs;
+		}
+	}
+
 	if (results) {
-		window.localStorage.setItem("currentTracksinPlayLists", JSON.stringify(results?.songs)
+		console.log(getSongsFromData(results), 'SONGS DATA @')
+	}
+
+
+
+	if (results) {
+		window.localStorage.setItem("currentTracksinPlayLists", JSON.stringify(getSongsFromData(results))
 		);
 	}
 
@@ -82,7 +123,7 @@ function PlaylistPage(props) {
 					<Topnav />
 
 					{JSON.parse(window.localStorage.getItem("playLists")).map((item) => {
-						if (item.id == path) {
+						if (item.id == id_Item) {
 							return (
 								<div key={item.title} onLoad={() => {
 									// changeBg(item.playlistBg);
@@ -116,14 +157,30 @@ function PlaylistPage(props) {
 									</div>
 
 									<div className={styles.PlaylistSongs}>
-										{results?.songs.map((song) => {
+
+
+										{getSongsFromData(results).map((song) => {
+
+
+                                          
 											song.link = song.media_preview_url?.replace('preview.saavncdn.com', 'aac.saavncdn.com').replace('_96_p', '_320');
+											if("song" in song){
+											
 											return (
+
+												
+
 												<button
 													key={song.id}
 													onClick={() => {
-														props.changeTrack([JSON.parse(window.localStorage.getItem("playLists")), results?.songs.indexOf(song)]);
-														props.changePlay(true);
+														if ("media_preview_url" in song) {
+
+															props.changeTrack([JSON.parse(window.localStorage.getItem("playLists")), getSongsFromData(results).indexOf(song)]);
+															props.changePlay(true);
+														}
+														else {
+															history.push(`/playtrack/${song.id}`);
+														}
 
 													}}
 													className={styles.SongBtn}
@@ -132,12 +189,34 @@ function PlaylistPage(props) {
 														data={{
 															listType: item.type,
 															song: song,
-															index: results?.songs.indexOf(song) + 1
+															index: getSongsFromData(results).indexOf(song) + 1
 														}}
 													/>
 												</button>
+
+
 											);
-										})}
+									}else{
+										return (
+
+											<PlaylistTrackIncomplete
+											data={{
+												listType: 'PLAYLIST',
+												song: song,
+												index: getSongsFromData(results).indexOf(song) + 1
+											}}
+										/>
+
+										);
+									}
+
+
+
+										}
+
+										
+										
+										)}
 									</div>
 								</div>
 							);

@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
+import endpoints from '../endpoints';
 
 // const BASE_API_URL = "https://thawing-scrubland-27252.herokuapp.com/api?uri=https://www.jiosaavn.com/api.php?";
 
-const BASE_API_URL = "https://crosdev.herokuapp.com/https://www.jiosaavn.com/api.php?";
+const BASE_API_URL = endpoints.BASE_API_URL;
 
 
 const useFetch = (part,query="") => {
@@ -40,7 +41,7 @@ const useFetch = (part,query="") => {
 
         // abort the fetch
         return () => abortCont.abort();
-    }, [part])
+    }, [part,query])
 
     return { data, loading, error };
 }
