@@ -20,7 +20,7 @@ function PlaylistCardM(props) {
 			<Link to={`/playlist/?id=${props.data.id}&type=${props.data?.type}`}>
 				<div className={styles.PlaylistCardS}>
 					<div className={styles.ImgBox}>
-						<img src={props.data.image} alt={props.data.title} />
+						<img src={props.data.image ? props.data.image : 'https://images.news18.com/ibnlive/uploads/2020/09/1601470124_untitled-design-24.jpg?im=FitAndFill,width=500,height=500'} alt={props.data.title} />
 					</div>
 					<div className={styles.Title}>
 						<TextBoldL>{props.data.title}</TextBoldL>

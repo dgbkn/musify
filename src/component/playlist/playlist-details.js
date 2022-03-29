@@ -7,7 +7,7 @@ function PlaylistDetails({data}) {
 	return (
         <div className={styles.playlistDetails}>
             <div className={styles.imgBox}>
-                <img src={data.image} />
+                <img src={data.image ? data.image : 'https://images.news18.com/ibnlive/uploads/2020/09/1601470124_untitled-design-24.jpg?im=FitAndFill,width=500,height=500'} />
             </div>
             <div className={styles.textBox}>
                 <TitleS>{data.type}</TitleS>

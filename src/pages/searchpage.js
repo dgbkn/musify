@@ -99,10 +99,9 @@ function SearchPage(props) {
                         item.image = item.image.replace('50x50', '500x500');
 
                         item.type = "artist";
-                        item.title = item.name;
                         item.subtitle = `Followers: ${item.follower_count}`;
-                        item.id = item.perma_url.split('/');
-                        item.id = item.id[item.id.length - 1];
+                        item.id = item?.url?.split('/');
+                        item.id = item?.id[item.id.length - 1];
                         return item;
 
                     }),
@@ -246,7 +245,7 @@ function SearchPage(props) {
 
 
                                 <br />
-                                <TitleM>Playlists / Albums</TitleM>
+                                <TitleM>Playlists / Albums /Artists</TitleM>
                                 <br />
                             <div className={stylesa.SectionCardsMedium} style={{ overflowY: 'inherit!important' }}>
 
@@ -283,10 +282,9 @@ function SearchPage(props) {
                                     item.image = item.image.replace('50x50', '500x500');
 
                                     item.type = "artist";
-                                    item.title = item.name;
-                                    item.subtitle = `Followers: ${item.follower_count}`;
-                                    item.id = item.perma_url.split('/');
-                                    item.id = item.id[item.id.length - 1];
+                                    item.subtitle = `Position: ${item.extra}`;
+                                    item.id = item?.url.split('/');
+                                    item.id = item?.id[item.id.length - 1];
                                     return (
                                         <PlaylistCardM
                                             key={item.id}
