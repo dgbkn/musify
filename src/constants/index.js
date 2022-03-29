@@ -49,16 +49,16 @@ export const LIBRARYTABS = [
     title: 'Charts',
     path: '/library/charts'
   },
-  {
-    title: 'Podcasts',
-    path: '/library/podcasts'
-  },
+  // {
+  //   title: 'Podcasts',
+  //   path: '/library/podcasts'
+  // },
   {
     title: 'Artists',
     path: '/library/artists'
   },
-  {
-    title: 'Radios',
-    path: '/library/radio'
-  }
+  // {
+  //   title: 'Radios',
+  //   path: '/library/radio'
+  // }
 ]
