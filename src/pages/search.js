@@ -12,7 +12,8 @@ function Search(){
 
             <div className={styles.Search}>
                 <TitleM>Search</TitleM>
-                <div className={styles.SearchCardGrid}>
+
+                {/* <div className={styles.SearchCardGrid}>
                     {SEARCHCARDS.map((card) => {
                         return (
                             <SearchPageCard 
@@ -25,7 +26,9 @@ function Search(){
                             />
                         );
                     })}
-                </div>
+                </div> */}
+
+
             </div>
         </div>
     );

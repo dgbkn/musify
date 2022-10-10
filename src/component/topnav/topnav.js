@@ -17,7 +17,7 @@ function Topnav({search = false, tabButtons = false,searchval=""}) {
                 </span>
                 <span>
                     <button className={styles.ProfileBtn}>
-                        Dev Goyal
+                        With ❤️ From India
                     </button>
                 </span>
           </div>

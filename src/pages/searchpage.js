@@ -25,7 +25,7 @@ import SkeletonPage from '../component/SkeletonPage/SkeletonPage';
 import { SEARCHCARDS } from '../data/index';
 import { Link } from 'react-router-dom';
 import styles_playlist_card_s from "../component/cards/playlist-card-s.module.css";
-import PlaylistTrackIncomplete from '../component/playlist/playlist_track_incomplete';
+import PlaylistTrackIncomplete from '../component/playlist/playlist_track_incomplete.js';
 
 
 function SearchPage(props) {
@@ -43,7 +43,7 @@ function SearchPage(props) {
     useEffect(() => {
         setStateTerm(new URLSearchParams(location.search).get("query"));
         const abortCont = new AbortController();
-        fetch(`https://crosdev.herokuapp.com/https://www.jiosaavn.com/api.php?${endpoints.searchBaseUrl}${encodeURIComponent(new URLSearchParams(location.search).get("query"))}`, { signal: abortCont.signal })
+        fetch(`${endpoints.PROXY}www.jiosaavn.com/api.php?${endpoints.searchBaseUrl}${encodeURIComponent(new URLSearchParams(location.search).get("query"))}`, { signal: abortCont.signal })
             .then(res => {
                 if (!res.ok) { // error coming back from server
                     throw Error('Could Not fetch the data for that resource');
@@ -54,6 +54,7 @@ function SearchPage(props) {
                 setIsPending(false);
                 console.log(data);
                 setData(data);
+
                 setError(null);
             })
             .catch(err => {
@@ -107,12 +108,16 @@ function SearchPage(props) {
                     }),
                     jsond])
                 );
+
+
             }
         
         
             
         
             if (data) {
+                var PLAYLISTCURRECT = JSON.parse(window.localStorage.getItem("currentplaylist"));
+                  
                 window.localStorage.setItem("currentTracksinPlayLists", JSON.stringify(data?.songs.data)
                 );
             }
@@ -137,7 +142,8 @@ function SearchPage(props) {
                         "uid": "phulki_user"
                     },
                     "explicit_content": "0",
-                    "mini_obj": true
+                    "mini_obj": true,
+                    "songs":data?.songs?.data
                 }
         
                 window.localStorage.setItem("currentplaylist", JSON.stringify(jsond)

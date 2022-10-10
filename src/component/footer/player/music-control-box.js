@@ -8,29 +8,166 @@ import { PLAYLIST as PLAYLISTOLD } from "../../../data/index";
 import styles from "./music-control-box.module.css";
 import { useState } from 'react';
 
-
+import endpoints from './../../../endpoints.js';
 
 
 function MusicControlBox(props) {
 
-    const [isDownloading,setisDownloading] = useState(false);
+    const [isDownloading, setisDownloading] = useState(false);
 
-    const downloadFile = (url, fileName) => {
-        setisDownloading(true);
-        axios({
-        url,
-          method: 'GET',
-          responseType: 'blob',
-        }).then((response) => {
-            setisDownloading(false);
-          const blobbedResponse = window.URL.createObjectURL(new Blob([response.data]));
-          const link = document.createElement('a');
-          link.href = blobbedResponse;
-          link.setAttribute('download', fileName);
-          document.body.appendChild(link);
-          link.click();
-        });
-      }
+    const downloadFile = (index) => {
+        var proxy = endpoints.PROXY;
+
+
+
+        var url;
+        var fileName;
+
+        if (!SONGS) {
+            url = endpoints.PROXY + encodeURIComponent(PLAYLISTOLD[0].playlistData[index].link);
+            fileName = PLAYLISTOLD[0].playlistData[index].songName;
+        }
+        else {
+
+            if (!("song" in SONGS[index])) {
+                fileName = `${SONGS[index].title.replace(" ", "_")}_by_dev.mp3`;
+            } else {
+                fileName = `${SONGS[index].song.replace(" ", "_")}_by_dev.mp3`;
+            }
+
+            if (!("media_preview_url" in SONGS[index])) {
+
+
+
+                var songData = SONGS[index];
+
+                const abortCont = new AbortController();
+                fetch(`${endpoints.PROXY}www.jiosaavn.com/api.php?${endpoints.songDetailsBaseUrl}${songData.id}`, { signal: abortCont.signal })
+                    .then(res => {
+                        if (!res.ok) { // error coming back from server
+                            throw Error('Could Not fetch the data for that resource');
+                        }
+                        return res.json();
+                    })
+                    .then(results => {
+                        console.log(results);
+                        var media_pre= "media_preview_url" in  results[Object.keys(results)[0]] ? results[Object.keys(results)[0]]["media_preview_url"] : "";
+
+
+                        if (results && "encrypted_media_url" in results[Object.keys(results)[0]] && !media_pre) {
+
+                            var dfd = results[Object.keys(results)[0]]?.encrypted_media_url;
+
+                            var uri = endpoints.BASE_API_URL + endpoints.getDecrptedUrl(dfd);
+
+                            fetch(uri)
+                                .then(res => {
+                                    if (!res.ok) { // error coming back from server
+                                        console.log('Could Not fetch the data for that resource');
+                                        return "";
+                                    }
+                                    return res.json();
+                                })
+                                .then(data => {
+                                    url = data.auth_url;
+                                    // if (proxy.includes('https/')) {
+                                    //     url = proxy + url.replace('https://', '');
+                                    // }
+                                    // else {
+                                    //     url = proxy + url;
+                                    // }
+
+
+                                    setisDownloading(true);
+                                    axios({
+                                        url,
+                                        method: 'GET',
+                                        responseType: 'blob',
+                                    }).then((response) => {
+                                        setisDownloading(false);
+                                        const blobbedResponse = window.URL.createObjectURL(new Blob([response.data]));
+                                        const link = document.createElement('a');
+                                        link.href = blobbedResponse;
+                                        link.setAttribute('download', fileName);
+                                        document.body.appendChild(link);
+                                        link.click();
+                                    });
+
+                                })
+                                .catch(err => {
+                                    if (err.name === 'AbortError') {
+                                        console.log('fetch aborted');
+                                    } else {
+                                        console.log(err);
+                                    }
+                                });
+
+                        }else if(media_pre){
+                            url = media_pre.replace('preview.saavncdn.com', 'aac.saavncdn.com').replace('_96_p', '_320');
+
+                            setisDownloading(true);
+                            axios({
+                                url,
+                                method: 'GET',
+                                responseType: 'blob',
+                            }).then((response) => {
+                                setisDownloading(false);
+                                const blobbedResponse = window.URL.createObjectURL(new Blob([response.data]));
+                                const link = document.createElement('a');
+                                link.href = blobbedResponse;
+                                link.setAttribute('download', fileName);
+                                document.body.appendChild(link);
+                                link.click();
+                            });
+                        }
+                    })
+                    .catch(err => {
+                        if (err.name === 'AbortError') {
+                            console.log('fetch aborted')
+                        } else {
+                            // auto catches network / connection error
+                            console.log('fetch error')
+                        }
+                    });
+
+                // abort the fetch
+                return () => abortCont.abort();
+
+
+
+            } else {
+                // url = endpoints.PROXY + encodeURIComponent(SONGS[index].media_preview_url.replace('preview.saavncdn.com', 'aac.saavncdn.com').replace('_96_p', '_320'));
+                // if (proxy.includes('https/')) {
+                //     url = proxy + url.replace('https://', '');
+                // }
+                // else {
+                //     url = proxy + url;
+                // }
+
+                url = SONGS[index].media_preview_url.replace('preview.saavncdn.com', 'aac.saavncdn.com').replace('_96_p', '_320');
+
+                setisDownloading(true);
+                axios({
+                    url,
+                    method: 'GET',
+                    responseType: 'blob',
+                }).then((response) => {
+                    setisDownloading(false);
+                    const blobbedResponse = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = blobbedResponse;
+                    link.setAttribute('download', fileName);
+                    document.body.appendChild(link);
+                    link.click();
+                });
+
+
+            }
+        }
+
+
+
+    }
 
 
     var PLAYLIST = JSON.parse(window.localStorage.getItem("playLists"));
@@ -59,9 +196,9 @@ function MusicControlBox(props) {
     return (
         <div className={styles.musicControl}>
 
-            <button className={styles.button} 
-                   onClick={()=>downloadFile(`https://thawing-scrubland-27252.herokuapp.com/api?uri=${encodeURIComponent(!SONGS ? PLAYLISTOLD[0].playlistData[props.trackData.trackKey[1]].link : SONGS[props.trackData.trackKey[1]].media_preview_url.replace('preview.saavncdn.com', 'aac.saavncdn.com').replace('_96_p', '_320'))}`,`${( !SONGS ? PLAYLISTOLD[0].playlistData[props.trackData.trackKey[1]].songName : SONGS[props.trackData.trackKey[1]].song).replace(" ","_")}_by_dev.mp3`)}
-               >
+            <button className={styles.button}
+                onClick={() => downloadFile(props.trackData.trackKey[1])}
+            >
                 {isDownloading ? <div id="loader" className={styles.nfLoader}></div> : <Icons.DownloadApp />}
             </button>
 

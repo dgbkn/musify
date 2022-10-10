@@ -405,24 +405,24 @@ export const PLAYLIST = [
 	},
 ];
 
-export const MUSICLINKS = [
-	{
-		link:
-			"https://server1.indiryuklemp3.org/mp3_files/yalan-t3OjaAeo6z-0.mp3",
-	},
-	{
-		link:
-			"https://server1.indiryuklemp3.org/mp3_files/a9b438cef5490afe36b0d0cb18ba9385.mp3",
-	},
-	{
-		link:
-			"https://server1.indiryuklemp3.org/mp3_files/a9b438cef5490afe36b0d0cb18ba9385.mp3",
-	},
-	{
-		link:
-			"https://server1.indiryuklemp3.org/mp3_files/a9b438cef5490afe36b0d0cb18ba9385.mp3",
-	},
-];
+// export const MUSICLINKS = [
+// 	{
+// 		link:
+// 			"https://server1.indiryuklemp3.org/mp3_files/yalan-t3OjaAeo6z-0.mp3",
+// 	},
+// 	{
+// 		link:
+// 			"https://server1.indiryuklemp3.org/mp3_files/a9b438cef5490afe36b0d0cb18ba9385.mp3",
+// 	},
+// 	{
+// 		link:
+// 			"https://server1.indiryuklemp3.org/mp3_files/a9b438cef5490afe36b0d0cb18ba9385.mp3",
+// 	},
+// 	{
+// 		link:
+// 			"https://server1.indiryuklemp3.org/mp3_files/a9b438cef5490afe36b0d0cb18ba9385.mp3",
+// 	},
+// ];
 
 export const SEARCHCARDS = [
 	

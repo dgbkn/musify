@@ -1,7 +1,8 @@
 
 var endpoints = {
   // BASE_API_URL : "https://crosdev.herokuapp.com/https://www.jiosaavn.com/api.php?",
-  BASE_API_URL : "https://proxy.goincop1.workers.dev/https/www.jiosaavn.com/api.php?",
+  BASE_API_URL : "https://dns.spotifie.workers.dev/https/www.jiosaavn.com/api.php?",
+  PROXY : "https://dns.spotifie.workers.dev/https/",
 
   searchBaseUrl:
     '__call=autocomplete.get&_format=json&_marker=0&cc=in&includeMetaTags=1&query=',
