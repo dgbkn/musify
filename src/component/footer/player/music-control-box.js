@@ -134,13 +134,9 @@ function MusicControlBox(props) {
 
 
             } else {
-                url = encodeURIComponent(SONGS[index].media_preview_url.replace('preview.saavncdn.com', 'aac.saavncdn.com').replace('_96_p', '_320'));
-                    url = proxy + url.replace('https://', '');
-            
-
-
                 url = SONGS[index].media_preview_url.replace('preview.saavncdn.com', 'aac.saavncdn.com').replace('_96_p', '_320');
-
+                    url = proxy + url.replace('https://', '');
+        
                 setisDownloading(true);
                 axios({
                     url,
