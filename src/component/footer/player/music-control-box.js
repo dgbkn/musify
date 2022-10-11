@@ -70,12 +70,9 @@ function MusicControlBox(props) {
                                 })
                                 .then(data => {
                                     url = data.auth_url;
-                                    // if (proxy.includes('https/')) {
-                                    //     url = proxy + url.replace('https://', '');
-                                    // }
-                                    // else {
-                                    //     url = proxy + url;
-                                    // }
+                                        url = proxy + url.replace('https://', '');
+                                    
+                    
 
 
                                     setisDownloading(true);
@@ -104,6 +101,7 @@ function MusicControlBox(props) {
 
                         }else if(media_pre){
                             url = media_pre.replace('preview.saavncdn.com', 'aac.saavncdn.com').replace('_96_p', '_320');
+                            url = proxy + url.replace('https://', '');
 
                             setisDownloading(true);
                             axios({
@@ -136,13 +134,10 @@ function MusicControlBox(props) {
 
 
             } else {
-                // url = endpoints.PROXY + encodeURIComponent(SONGS[index].media_preview_url.replace('preview.saavncdn.com', 'aac.saavncdn.com').replace('_96_p', '_320'));
-                // if (proxy.includes('https/')) {
-                //     url = proxy + url.replace('https://', '');
-                // }
-                // else {
-                //     url = proxy + url;
-                // }
+                url = encodeURIComponent(SONGS[index].media_preview_url.replace('preview.saavncdn.com', 'aac.saavncdn.com').replace('_96_p', '_320'));
+                    url = proxy + url.replace('https://', '');
+            
+
 
                 url = SONGS[index].media_preview_url.replace('preview.saavncdn.com', 'aac.saavncdn.com').replace('_96_p', '_320');
 
