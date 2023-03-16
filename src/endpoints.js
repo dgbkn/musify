@@ -5,8 +5,8 @@ var endpoints = {
   // BASE_API_URL : "https://dns.spotifie.workers.dev/https/www.jiosaavn.com/api.php?",
   // PROXY : "https://dns.spotifie.workers.dev/https/",
 
-  BASE_API_URL : "https://cors.spotifie.workers.dev/?https://www.jiosaavn.com/api.php?",
-  PROXY : "https://cors.spotifie.workers.dev/?https://",
+  BASE_API_URL : "https://cors-prod.spotifie.workers.dev/?https://www.jiosaavn.com/api.php?",
+  PROXY : "https://cors-prod.spotifie.workers.dev/?https://",
 
 
   
