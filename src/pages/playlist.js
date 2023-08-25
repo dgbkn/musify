@@ -184,7 +184,7 @@ function PlaylistPage(props) {
 															   .then(results => {
 																if (results && "encrypted_media_url" in  results[Object.keys(results)[0]]  ) {
 																	var encryptedUrl = results[Object.keys(results)[0]]?.encrypted_media_url;
-																	var uri=  endpoints.BASE_API_URL  +  endpoints.getDecrptedUrl( dfd );
+																	var uri=  endpoints.BASE_API_URL  +  endpoints.getDecrptedUrl( encryptedUrl );
 
 																	fetch(uri)
 																	.then(res => {
