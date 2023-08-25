@@ -173,14 +173,38 @@ function PlaylistPage(props) {
 												<button
 													key={song.id}
 													onClick={() => {
-														if ("media_preview_url" in song) {
+														// if ("media_preview_url" in song) {
 
-															props.changeTrack([JSON.parse(window.localStorage.getItem("playLists")), getSongsFromData(results).indexOf(song)]);
-															props.changePlay(true);
-														}
-														else {
-															history.push(`/playtrack/${song.id}`);
-														}
+														// 	props.changeTrack([JSON.parse(window.localStorage.getItem("playLists")), getSongsFromData(results).indexOf(song)]);
+														// 	props.changePlay(true);
+														// }
+														// else {
+															fetch(endpoints.songDetailsBaseUrl + song.id)
+   															.then(response => response.json())
+															   .then(results => {
+																if (results && "encrypted_media_url" in  results[Object.keys(results)[0]]  ) {
+																	var encryptedUrl = results[Object.keys(results)[0]]?.encrypted_media_url;
+																	var uri=  endpoints.BASE_API_URL  +  endpoints.getDecrptedUrl( dfd );
+
+																	fetch(uri)
+																	.then(res => {
+																		if (!res.ok) { // error coming back from server
+																			console.log('Could Not fetch the data for that resource');
+																			return "";
+																		}
+																		return res.json();
+																	})
+																	.then(data => {
+																		song.media_preview_url = data.auth_url;
+																	//   setplayUrl(data.auth_url);
+												               		props.changeTrack([JSON.parse(window.localStorage.getItem("playLists")), getSongsFromData(results).indexOf(song)]);
+														   		    props.changePlay(true);
+																	})
+																}
+															   });
+
+															// history.push(`/playtrack/${song.id}`);
+														// }
 
 													}}
 													className={styles.SongBtn}
