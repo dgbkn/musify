@@ -7,14 +7,14 @@ function PlaylistDetails({data}) {
 	return (
         <div className={styles.playlistDetails}>
             <div className={styles.imgBox}>
-                <img src={data.image ? data.image : 'https://images.news18.com/ibnlive/uploads/2020/09/1601470124_untitled-design-24.jpg?im=FitAndFill,width=500,height=500'} />
+                <img src={data.image ? data.image : 'https://images.news18.com/ibnlive/uploads/2020/09/1601470124_untitled-design-24.jpg?im=FitAndFill,width=500,height=500'}  alt=''/>
             </div>
             <div className={styles.textBox}>
                 <TitleS>{data.type}</TitleS>
                 <h1>{data.title}</h1>
                 <div className={styles.Artist}>
                     <figure>
-                        <img src={data.image} />
+                        <img src={data.image}  alt=''/>
                     </figure>
                     <TextBoldM>{data.subheading}</TextBoldM>
                 </div>
