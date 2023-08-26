@@ -1,7 +1,18 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
+import { initializeApp } from "firebase/app";
+import {
+GoogleAuthProvider, getAuth,signInWithPopup,signInWithEmailAndPassword,createUserWithEmailAndPassword,sendPasswordResetEmail,signOut,} from "firebase/auth";
+
+import {
+getFirestore,
+query,
+getDocs,
+collection,
+where,
+addDoc,
+} from "firebase/firestore";
+
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
@@ -18,4 +29,36 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
+export const db = getFirestore(app);
+export const logout = () => {
+  signOut(auth);
+};
+
+export default app;
+
+const googleProvider = new GoogleAuthProvider();
+
+export const signInWithGoogle = async () => {
+  try {
+      const { user } = await signInWithPopup(auth, googleProvider);
+      const userQuery = query(collection(db, "users"), where("uid", "==", user.uid));
+      const userQuerySnapshot = await getDocs(userQuery);
+
+      console.log("USER LOGGED IN:",user);
+      
+      if (userQuerySnapshot.docs.length === 0) {
+          await addDoc(collection(db, "users"), {
+              uid: user.uid,
+              name: user.displayName,
+              authProvider: "google",
+              email: user.email,
+          });
+      }
+  } catch (error) {
+      console.error(error);
+      alert(error.message);
+  }
+};
+
 const analytics = getAnalytics(app);
