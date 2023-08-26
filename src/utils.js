@@ -88,3 +88,4 @@ export const  generateGrad = () => {
 export const generateRGBGrad = () =>{
     return `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)},0.6)`;
 }
+

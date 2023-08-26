@@ -31,13 +31,13 @@ function MusicControlBox(props) {
         else {
 
             if (!("song" in SONGS[index])) {
-                fileName = `${SONGS[index].title.replace(" ", "_")}_by_dev.mp3`;
+                fileName = `${SONGS[index].title.replace(" ", "_")}_spotifie.mp3`;
             } else {
-                fileName = `${SONGS[index].song.replace(" ", "_")}_by_dev.mp3`;
+                fileName = `${SONGS[index].song.replace(" ", "_")}_spotifie.mp3`;
             }
 
 
-             url = directDecryptMessage(SONGS[index].encrypted_media_url);
+                url = "https://proxy.goincop1.workers.dev/https/" +  directDecryptMessage(SONGS[index].encrypted_media_url).replace("https://","").replace("http://","");
         
                 setisDownloading(true);
                 axios({
