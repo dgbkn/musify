@@ -9,6 +9,7 @@ import styles from "./music-control-box.module.css";
 import { useState } from 'react';
 
 import endpoints from './../../../endpoints.js';
+import { directDecryptMessage } from '../../../utils';
 
 
 function MusicControlBox(props) {
@@ -35,107 +36,8 @@ function MusicControlBox(props) {
                 fileName = `${SONGS[index].song.replace(" ", "_")}_by_dev.mp3`;
             }
 
-            if (!("media_preview_url" in SONGS[index])) {
 
-
-
-                var songData = SONGS[index];
-
-                const abortCont = new AbortController();
-                fetch(`${endpoints.PROXY}www.jiosaavn.com/api.php?${endpoints.songDetailsBaseUrl}${songData.id}`, { signal: abortCont.signal })
-                    .then(res => {
-                        if (!res.ok) { // error coming back from server
-                            throw Error('Could Not fetch the data for that resource');
-                        }
-                        return res.json();
-                    })
-                    .then(results => {
-                        console.log(results);
-                        var media_pre= "media_preview_url" in  results[Object.keys(results)[0]] ? results[Object.keys(results)[0]]["media_preview_url"] : "";
-
-
-                        if (results && "encrypted_media_url" in results[Object.keys(results)[0]] && !media_pre) {
-
-                            var dfd = results[Object.keys(results)[0]]?.encrypted_media_url;
-
-                            var uri = endpoints.BASE_API_URL + endpoints.getDecrptedUrl(dfd);
-
-                            fetch(uri)
-                                .then(res => {
-                                    if (!res.ok) { // error coming back from server
-                                        console.log('Could Not fetch the data for that resource');
-                                        return "";
-                                    }
-                                    return res.json();
-                                })
-                                .then(data => {
-                                    url = data.auth_url;
-                                        url = proxy + url.replace('https://', '');
-                                    
-                    
-
-
-                                    setisDownloading(true);
-                                    axios({
-                                        url,
-                                        method: 'GET',
-                                        responseType: 'blob',
-                                    }).then((response) => {
-                                        setisDownloading(false);
-                                        const blobbedResponse = window.URL.createObjectURL(new Blob([response.data]));
-                                        const link = document.createElement('a');
-                                        link.href = blobbedResponse;
-                                        link.setAttribute('download', fileName);
-                                        document.body.appendChild(link);
-                                        link.click();
-                                    });
-
-                                })
-                                .catch(err => {
-                                    if (err.name === 'AbortError') {
-                                        console.log('fetch aborted');
-                                    } else {
-                                        console.log(err);
-                                    }
-                                });
-
-                        }else if(media_pre){
-                            url = media_pre.replace('preview.saavncdn.com', 'aac.saavncdn.com').replace('_96_p', '_320');
-                            url = proxy + url.replace('https://', '');
-
-                            setisDownloading(true);
-                            axios({
-                                url,
-                                method: 'GET',
-                                responseType: 'blob',
-                            }).then((response) => {
-                                setisDownloading(false);
-                                const blobbedResponse = window.URL.createObjectURL(new Blob([response.data]));
-                                const link = document.createElement('a');
-                                link.href = blobbedResponse;
-                                link.setAttribute('download', fileName);
-                                document.body.appendChild(link);
-                                link.click();
-                            });
-                        }
-                    })
-                    .catch(err => {
-                        if (err.name === 'AbortError') {
-                            console.log('fetch aborted')
-                        } else {
-                            // auto catches network / connection error
-                            console.log('fetch error')
-                        }
-                    });
-
-                // abort the fetch
-                return () => abortCont.abort();
-
-
-
-            } else {
-                url = SONGS[index].media_preview_url.replace('preview.saavncdn.com', 'aac.saavncdn.com').replace('_96_p', '_320');
-                    url = proxy + url.replace('https://', '');
+             url = directDecryptMessage(SONGS[index].encrypted_media_url);
         
                 setisDownloading(true);
                 axios({
@@ -154,7 +56,7 @@ function MusicControlBox(props) {
 
 
             }
-        }
+        
 
 
 

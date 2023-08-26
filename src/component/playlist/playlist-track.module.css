@@ -18,7 +18,8 @@
     position: absolute;
     opacity: 0;
     background: none;
-    left: 5px;
+    left: 15px;
+    top: 20px;
     z-index: 2;
     width: 32px;
     height: 32px;

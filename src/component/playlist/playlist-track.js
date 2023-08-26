@@ -18,7 +18,7 @@ function PlaylistTrack(props) {
     }, 50);*/
     
     useEffect(() => {
-        if(props.data.song.link === props.trackData.track && props.isPlaying === true){
+        if(props.data.song.id === props.trackData.trackId && props.isPlaying === true){
             setthisSong(true)
         }else {
             setthisSong(false)
@@ -46,25 +46,25 @@ function unEscape(htmlStr) {
                     : {}
             }
         >   
-            <button
+            <div
                 className={styles.playBtn}
-                onClick={
-                    () => 
-                    {
-                        if( "media_preview_url" in props.data.song ){
-                        props.changePlay(!props.isPlaying);
-                        }else{
-                            history.push(`/playtrack/${props.data.song.id}`);
-                        }
-                    }
+                // onClick={
+                //     () => 
+                //     {
+                //         if( "media_preview_url" in props.data.song ){
+                //         props.changePlay(!props.isPlaying);
+                //         }else{
+                //             history.push(`/playtrack/${props.data.song.id}`);
+                //         }
+                //     }
                 
-                }
+                // }
             >
                 {thisSong 
                     ? <Icons.Pause /> 
                     : <Icons.Play />
                 }
-            </button>
+            </div>
 
             {thisSong 
                     ? <img className={styles.gif} src={Playgif} alt=""/> 

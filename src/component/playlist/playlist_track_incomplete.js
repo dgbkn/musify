@@ -11,7 +11,6 @@ import useFetch from '../../hooks/useFetch';
 import endpoints from '../../endpoints';
 import SkeletonElement from "../SkeletonElement/SkeletonElement";
 import { useHistory } from "react-router-dom";
-import { directDecryptMessage, getSongLink } from "../../utils";
 
 function PlaylistTrackIncomplete(props) {
     const [thisSong, setthisSong] = useState(false);
@@ -29,7 +28,7 @@ function PlaylistTrackIncomplete(props) {
 
     useEffect(() => {
         if (data) {
-            if (props.data.song.link === props.trackData.track && props.isPlaying === true) {
+            if(props.data.song.id === props.trackData.trackId && props.isPlaying === true){
                 setthisSong(true)
             } else {
                 setthisSong(false)
@@ -67,12 +66,10 @@ function PlaylistTrackIncomplete(props) {
                         var otherTracks = JSON.parse(window.localStorage.getItem("currentTracksinPlayLists"));
                         var indexOfSong = props.data.index - 1;
                         var song = data[Object.keys(data)[0]];
-                        var link = await getSongLink(song.id);
-
                         otherTracks[indexOfSong] = song;
     
                         window.localStorage.setItem("currentTracksinPlayLists", JSON.stringify(otherTracks));
-                        props.changeTrack([JSON.parse(window.localStorage.getItem("playLists")), indexOfSong,link]);
+                        props.changeTrack([JSON.parse(window.localStorage.getItem("playLists")), indexOfSong]);
                         props.changePlay(true);	
                     }}
                     className={styles.SongBtn}
@@ -86,7 +83,7 @@ function PlaylistTrackIncomplete(props) {
                                 : {}
                         }
                     >
-                        <button
+                        <div
                             className={styles.playBtn}
                             onClick={() => props.changePlay(!props.isPlaying)}
                         >
@@ -94,7 +91,7 @@ function PlaylistTrackIncomplete(props) {
                                 ? <Icons.Pause />
                                 : <Icons.Play />
                             }
-                        </button>
+                        </div>
 
                         {thisSong
                             ? <img className={styles.gif} src={Playgif} alt=""/>

@@ -17,12 +17,16 @@ export const directDecryptMessage = (message) => {
         }
     );
     
-    const decryptedText = CryptoJS.enc.Utf8.stringify(decoded).trim(); 
+    var decryptedText = CryptoJS.enc.Utf8.stringify(decoded).trim();
+    if(decryptedText.includes("_96")){
+        decryptedText = decryptedText.replace('_96', '_320')
+    }
+     
     return decryptedText;
 };
 
 
-export const getSongLink = async (songId) => {  
+export const fetchSongLink = async (songId) => {  
 
     var dataFetch = await fetch( endpoints.BASE_API_URL + endpoints.songDetailsBaseUrl + songId)
     .then(response => response.json())

@@ -1,5 +1,6 @@
 import { PLAYLIST } from "../data/index";
 import { PLAYPAUSE, CHANGETRACK } from "../actions/index";
+import { directDecryptMessage } from "../utils";
 
 const INITIAL_STATE = {
   trackData: {
@@ -20,27 +21,36 @@ export const reducer = (state = INITIAL_STATE, action) => {
         isPlaying: action.payload
       };
     case CHANGETRACK:
-      console.log(JSON.parse(window.localStorage.getItem("currentTracksinPlayLists")));
-      var jsonList = JSON.parse(window.localStorage.getItem("currentTracksinPlayLists"));
-      return {
+      // console.log(JSON.parse(window.localStorage.getItem("currentTracksinPlayLists")));
+      var currentSongs = JSON.parse(window.localStorage.getItem("currentTracksinPlayLists"));
+      var songIndex = action.payload[1];
+
+      var dataReturn ={
         ...state,
         trackData: {
-          ...state.trackData,
+          ...state.trackData, 
           trackKey: action.payload,
           track: `${
-             action.payload[2]
+            directDecryptMessage(currentSongs[songIndex].encrypted_media_url)
           }`,
           trackName: `${
-            jsonList[action.payload[1]].song
+            currentSongs[songIndex].song
+          }`,
+          trackId: `${
+            currentSongs[songIndex].id
           }`,
           trackImg: `${
-            jsonList[action.payload[1]].image
+            currentSongs[songIndex].image
           }`,
           trackArtist: `${
-            jsonList[action.payload[1]].singers
+            currentSongs[songIndex].singers
           }`
         }
-      };
+      }
+
+      console.log("DATAISGOLD",dataReturn);
+      return dataReturn;
+
     default:
       return state;
   }

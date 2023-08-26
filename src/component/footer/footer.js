@@ -10,7 +10,6 @@ import Audio from './audio';
 
 import CONST from '../../constants/index';
 import styles from "./footer.module.css";
-import { getSongLink } from '../../utils';
 
 function Footer(props){
     const size = useWindowSize();
@@ -47,17 +46,16 @@ function Footer(props){
     
     useEffect(() => {
         audioRef.current.addEventListener('ended', async () => {
-            var currentPlayList = window.localStorage.getItem("currentTracksinPlayLists");
-            currentPlayList = JSON.parse(currentPlayList);
-            console.log("DEVDATA",props.trackData,currentPlayList,props.trackData.trackKey[1]);
+            var PLAYLISTCURRECT = JSON.parse(window.localStorage.getItem("currentplaylist"));
+            var SONGS = PLAYLISTCURRECT?.songs;
+            var PLAYLIST = JSON.parse(window.localStorage.getItem("playLists"));
 
-            if(props.trackData.trackKey[1] === currentPlayList.length-1){
-                var linkZero = await getSongLink(currentPlayList[0].song.id);
-                props.changeTrack([currentPlayList, 0,linkZero]);
-            }else{
-                props.trackData.trackKey[1]++;
-                var linkNew = await getSongLink(currentPlayList[props.trackData.trackKey[1]].id);
-                props.changeTrack([currentPlayList,props.trackData.trackKey[1],linkNew])
+            var index = PLAYLIST.map(function (e) { return e.id; }).indexOf(PLAYLISTCURRECT.listid);
+
+            if (props.trackData.trackKey[1] == (SONGS.length) - 1) {
+                props.changeTrack([props.trackData.trackKey[0], 0])
+            } else {
+                props.changeTrack([props.trackData.trackKey[0], parseInt(props.trackData.trackKey[1]) + 1])
             }
         })
     },[]);

@@ -8,14 +8,11 @@ import IconButton from '../component/buttons/icon-button';
 import PlaylistDetails from '../component/playlist/playlist-details';
 import PlaylistTrack from '../component/playlist/playlist-track';
 import * as Icons from '../component/icons';
-import { PLAYLIST } from "../data/index";
-import gradient from 'random-gradient'
-import crypto from 'crypto';
 import styles from './playlist.module.css';
 import { useEffect, useState } from 'react';
 import SkeletonPage from "../component/SkeletonPage/SkeletonPage";
 
-import { directDecryptMessage, generateRGBGrad, getSongLink } from '../utils';
+import { generateRGBGrad } from '../utils';
 
 
 import useFetch from '../hooks/useFetch';
@@ -40,17 +37,9 @@ function PlaylistPage(props) {
 
 	var { loading, error, data: results } = useFetch(endpoints.getEndpointofTypeofContent(type), fetch_id);
 
-	var setDecipher = () => {
-		const key = Buffer.from('38346591', 'hex');
-		const iv = Buffer.alloc(8); // For ECB mode, IV is not used
-	
-		return crypto.createDecipheriv('des-ecb', key, iv);
-	}
-
-
 	useEffect(() => {
 		setIsthisPlay(playlistIndex === props.trackData.trackKey[0])
-	})
+	},[]);
 
 
 	if (!type || !id_Item) {
@@ -73,7 +62,7 @@ function PlaylistPage(props) {
 	function getSongsFromData(data) {
 
 
-		console.log("DASTA",data)
+		// console.log("DASTA",data)
 		switch (type) {
 			case 'album':
 				return data.songs;
@@ -92,11 +81,6 @@ function PlaylistPage(props) {
 				return data.songs;
 		}
 	}
-
-	if (results) {
-		console.log(getSongsFromData(results), 'SONGS DATA @')
-	}
-
 
 
 	if (results) {
@@ -172,9 +156,8 @@ function PlaylistPage(props) {
 											return (
 													<button
 													key={song.id}
-													onClick={ async () => {
-														    var link = await getSongLink(song.id);
-															props.changeTrack([JSON.parse(window.localStorage.getItem("playLists")), getSongsFromData(results).indexOf(song),link]);
+													onClick={  () => {
+															props.changeTrack([JSON.parse(window.localStorage.getItem("playLists")), getSongsFromData(results).indexOf(song)]);
 															props.changePlay(true);	
 													}}
 													className={styles.SongBtn}

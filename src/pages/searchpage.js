@@ -241,6 +241,7 @@ function SearchPage(props) {
                             {data?.songs.data.map((song) => {
                                 // return getSongCard(song);
                                 return <PlaylistTrackIncomplete 
+                                key={song.id}
                                 data={{
                                     listType: 'PLAYLIST',
                                     song: song,

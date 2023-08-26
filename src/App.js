@@ -28,11 +28,17 @@ import PlayTrackPage from './pages/playtrackpage';
 function App(props) {
   const size = useWindowSize();
   document.body.onkeyup = function(e) {
-    if (e.key == " " ||
-        e.code == "Space" ||      
-        e.keyCode == 32      
+    if (e.key === " " ||
+        e.code === "Space" ||      
+        e.keyCode === 32      
     ) {
-      props.changePlay(!props.isPlaying)    
+      e.preventDefault();
+
+      const activeElement = document.activeElement;
+      const isInput = activeElement.tagName === "INPUT";
+      if (!isInput) {
+        props.changePlay(!props.isPlaying) 
+      }   
     }
   }
   return (
