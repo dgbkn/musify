@@ -15,8 +15,10 @@ var endpoints = {
     '__call=autocomplete.get&_format=json&_marker=0&cc=in&includeMetaTags=1&query=',
   songDetailsBaseUrl:
     '__call=song.getDetails&cc=in&_marker=0%3F_marker%3D0&_format=json&pids=',
-  albumDetailsBaseUrl:
+    albumDetailsBaseUrl:
     '__call=content.getAlbumDetails&_format=json&cc=in&_marker=0%3F_marker%3D0&albumid=',
+    albumTokenDetailsBaseUrl:
+    '__call=webapi.get&type=album&includeMetaTags=0&ctx=wap6dot0&api_version=4&_format=json&_marker=0&token=',
   lyricsBaseUrl:
     '__call=lyrics.getLyrics&ctx=web6dot0&api_version=4&_format=json&_marker=0%3F_marker%3D0&lyrics_id=',
     playlistDetailsBaseUrl:
@@ -39,7 +41,9 @@ var endpoints = {
     getEndpointofTypeofContent: (type) => {
       switch (type) {
         case 'album':
-          return endpoints.albumDetailsBaseUrl;
+          return endpoints.albumDetailsBaseUrl;    
+        case 'albumtok':
+          return endpoints.albumTokenDetailsBaseUrl;
         case 'show':
           return '__call=webapi.get&type=show&season_number=&sort_order=&includeMetaTags=0&ctx=web6dot0&api_version=4&_format=json&_marker=0&token=';
         case 'playlist':

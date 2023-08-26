@@ -7,6 +7,8 @@
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.8.0",
     "axios": "^0.21.0",
+    "crypto-js": "^4.1.1",
+    "firebase": "^10.3.0",
     "framer-motion": "^4.1.17",
     "qs": "^6.10.3",
     "random-gradient": "^0.0.2",

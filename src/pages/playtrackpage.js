@@ -123,7 +123,7 @@ function PlayTrackPage(props) {
 
                     <div className={styles.playlistDetails}>
             <div className={styles.imgBox}>
-                <img src={results[`${path}`].image} />
+                <img src={results[`${path}`].image}  alt=''/>
             </div>
             <div className={styles.textBox}>
                 <TitleS>{"Track"}</TitleS>

@@ -8,9 +8,9 @@ import MusicProgressBar from './player/music-progress-bar';
 import FooterRight from './footer-right';
 import Audio from './audio';
 
-import { PLAYLIST } from "../../data/index";
 import CONST from '../../constants/index';
 import styles from "./footer.module.css";
+import { getSongLink } from '../../utils';
 
 function Footer(props){
     const size = useWindowSize();
@@ -46,14 +46,21 @@ function Footer(props){
 
     
     useEffect(() => {
-        audioRef.current.addEventListener('ended', () => {
-            if(props.trackData.trackKey[1] === (PLAYLIST[props.trackData.trackKey[0]].playlistData.length)-1){
-                props.changeTrack([props.trackData.trackKey[0], 0])
+        audioRef.current.addEventListener('ended', async () => {
+            var currentPlayList = window.localStorage.getItem("currentTracksinPlayLists");
+            currentPlayList = JSON.parse(currentPlayList);
+            console.log("DEVDATA",props.trackData,currentPlayList,props.trackData.trackKey[1]);
+
+            if(props.trackData.trackKey[1] === currentPlayList.length-1){
+                var linkZero = await getSongLink(currentPlayList[0].song.id);
+                props.changeTrack([currentPlayList, 0,linkZero]);
             }else{
-                props.changeTrack([props.trackData.trackKey[0], parseInt(props.trackData.trackKey[1])+1])
+                props.trackData.trackKey[1]++;
+                var linkNew = await getSongLink(currentPlayList[props.trackData.trackKey[1]].id);
+                props.changeTrack([currentPlayList,props.trackData.trackKey[1],linkNew])
             }
         })
-    });
+    },[]);
 
     return (
         <footer className={styles.footer}>

@@ -11,6 +11,7 @@ import useFetch from '../../hooks/useFetch';
 import endpoints from '../../endpoints';
 import SkeletonElement from "../SkeletonElement/SkeletonElement";
 import { useHistory } from "react-router-dom";
+import { directDecryptMessage, getSongLink } from "../../utils";
 
 function PlaylistTrackIncomplete(props) {
     const [thisSong, setthisSong] = useState(false);
@@ -61,29 +62,18 @@ function PlaylistTrackIncomplete(props) {
 
                 <button
                     key={props.data.id}
-                    onClick={() => {
+                    onClick={async () => {
 
+                        var otherTracks = JSON.parse(window.localStorage.getItem("currentTracksinPlayLists"));
+                        var indexOfSong = props.data.index - 1;
+                        var song = data[Object.keys(data)[0]];
+                        var link = await getSongLink(song.id);
 
-                        if( "media_preview_url" in data[Object.keys(data)[0]] ){
-                            var otherTracks = JSON.parse(window.localStorage.getItem("currentTracksinPlayLists"));
-                            var indexOfSong = props.data.index - 1;
-                            
-                            // console.log("index DSFDF",indexOfSong,"currdata=",otherTracks);
+                        otherTracks[indexOfSong] = song;
     
-                            otherTracks[indexOfSong] = data[Object.keys(data)[0]];
-    
-                            window.localStorage.setItem("currentTracksinPlayLists", JSON.stringify(otherTracks));
-    
-    
-                            props.changeTrack([otherTracks, indexOfSong]);
-                            props.changePlay(true);
-                        }else{
-                            history.push(`/playtrack/${songData.id}`);
-                        }
-
-
-
-
+                        window.localStorage.setItem("currentTracksinPlayLists", JSON.stringify(otherTracks));
+                        props.changeTrack([JSON.parse(window.localStorage.getItem("playLists")), indexOfSong,link]);
+                        props.changePlay(true);	
                     }}
                     className={styles.SongBtn}
                 >
@@ -107,11 +97,11 @@ function PlaylistTrackIncomplete(props) {
                         </button>
 
                         {thisSong
-                            ? <img className={styles.gif} src={Playgif} />
+                            ? <img className={styles.gif} src={Playgif} alt=""/>
                             : <p className={styles.SongIndex}>{props.data.index}</p>
                         }
 
-                        {props.data.listType === "albüm" ? "" : <img src={props.data.song.image} />}
+                        {props.data.listType === "albüm" ? "" : <img src={props.data.song.image} alt=""/>}
 
                         <span>
                             <TextBoldL>{unEscape(props.data.song.title)}</TextBoldL>

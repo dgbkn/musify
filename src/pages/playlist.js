@@ -10,12 +10,12 @@ import PlaylistTrack from '../component/playlist/playlist-track';
 import * as Icons from '../component/icons';
 import { PLAYLIST } from "../data/index";
 import gradient from 'random-gradient'
-
+import crypto from 'crypto';
 import styles from './playlist.module.css';
 import { useEffect, useState } from 'react';
 import SkeletonPage from "../component/SkeletonPage/SkeletonPage";
 
-import { generateRGBGrad } from '../utils';
+import { directDecryptMessage, generateRGBGrad, getSongLink } from '../utils';
 
 
 import useFetch from '../hooks/useFetch';
@@ -39,6 +39,14 @@ function PlaylistPage(props) {
 	var fetch_id = radioStation ? radioStation : id_Item;
 
 	var { loading, error, data: results } = useFetch(endpoints.getEndpointofTypeofContent(type), fetch_id);
+
+	var setDecipher = () => {
+		const key = Buffer.from('38346591', 'hex');
+		const iv = Buffer.alloc(8); // For ECB mode, IV is not used
+	
+		return crypto.createDecipheriv('des-ecb', key, iv);
+	}
+
 
 	useEffect(() => {
 		setIsthisPlay(playlistIndex === props.trackData.trackKey[0])
@@ -160,52 +168,14 @@ function PlaylistPage(props) {
 
 
 										{getSongsFromData(results).map((song) => {
-
-
-                                          
-											song.link = song.media_preview_url?.replace('preview.saavncdn.com', 'aac.saavncdn.com').replace('_96_p', '_320');
 											if("song" in song){
-											
 											return (
-
-												
-
-												<button
+													<button
 													key={song.id}
-													onClick={() => {
-														// if ("media_preview_url" in song) {
-
-														// 	props.changeTrack([JSON.parse(window.localStorage.getItem("playLists")), getSongsFromData(results).indexOf(song)]);
-														// 	props.changePlay(true);
-														// }
-														// else {
-															fetch(endpoints.songDetailsBaseUrl + song.id)
-   															.then(response => response.json())
-															   .then(results => {
-																if (results && "encrypted_media_url" in  results[Object.keys(results)[0]]  ) {
-																	var encryptedUrl = results[Object.keys(results)[0]]?.encrypted_media_url;
-																	var uri=  endpoints.BASE_API_URL  +  endpoints.getDecrptedUrl( encryptedUrl );
-
-																	fetch(uri)
-																	.then(res => {
-																		if (!res.ok) { // error coming back from server
-																			console.log('Could Not fetch the data for that resource');
-																			return "";
-																		}
-																		return res.json();
-																	})
-																	.then(data => {
-																		song.media_preview_url = data.auth_url;
-																	//   setplayUrl(data.auth_url);
-												               		props.changeTrack([JSON.parse(window.localStorage.getItem("playLists")), getSongsFromData(results).indexOf(song)]);
-														   		    props.changePlay(true);
-																	})
-																}
-															   });
-
-															// history.push(`/playtrack/${song.id}`);
-														// }
-
+													onClick={ async () => {
+														    var link = await getSongLink(song.id);
+															props.changeTrack([JSON.parse(window.localStorage.getItem("playLists")), getSongsFromData(results).indexOf(song),link]);
+															props.changePlay(true);	
 													}}
 													className={styles.SongBtn}
 												>

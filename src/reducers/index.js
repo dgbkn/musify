@@ -28,7 +28,7 @@ export const reducer = (state = INITIAL_STATE, action) => {
           ...state.trackData,
           trackKey: action.payload,
           track: `${
-            jsonList[action.payload[1]].media_preview_url.replace('preview.saavncdn.com', 'aac.saavncdn.com').replace('_96_p', '_320')
+             action.payload[2]
           }`,
           trackName: `${
             jsonList[action.payload[1]].song

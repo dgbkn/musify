@@ -1,3 +1,44 @@
+// var CryptoJS = require("crypto-js");
+
+import CryptoJS from "crypto-js";
+import endpoints from "./endpoints";
+
+export const directDecryptMessage = (message) => {
+    const keyHex = CryptoJS.enc.Utf8.parse("38346591");
+
+    const decoded = CryptoJS.DES.decrypt(
+        {
+            ciphertext: CryptoJS.enc.Base64.parse(message),
+        },
+        keyHex,
+        {
+            mode: CryptoJS.mode.ECB,
+            padding: CryptoJS.pad.Pkcs7,
+        }
+    );
+    
+    const decryptedText = CryptoJS.enc.Utf8.stringify(decoded).trim(); 
+    return decryptedText;
+};
+
+
+export const getSongLink = async (songId) => {  
+
+    var dataFetch = await fetch( endpoints.BASE_API_URL + endpoints.songDetailsBaseUrl + songId)
+    .then(response => response.json())
+    .then(resultsJi => {
+     return resultsJi;
+    });
+
+    if (dataFetch && "encrypted_media_url" in  dataFetch[Object.keys(dataFetch)[0]]  ) {
+        var encryptedUrl = dataFetch[Object.keys(dataFetch)[0]]?.encrypted_media_url;
+        var decrypted = directDecryptMessage(encryptedUrl);
+        var link = decrypted.replace('_96', '_320');	
+    }
+
+    return link ?? "";
+};
+
 export const getOneMonthAgoReleaseDate = () => {
     let date = new Date();
     date.setMonth(date.getMonth() - 1);

@@ -67,11 +67,11 @@ function unEscape(htmlStr) {
             </button>
 
             {thisSong 
-                    ? <img className={styles.gif} src={Playgif} /> 
+                    ? <img className={styles.gif} src={Playgif} alt=""/> 
                     : <p className={styles.SongIndex}>{props.data.index}</p>
             }
 
-			{props.data.listType === "albüm" ? "" : <img src={props.data.song.image} />}
+			{props.data.listType === "albüm" ? "" : <img src={props.data.song.image} alt=""/>}
 
 			<span>
 				<TextBoldL>{unEscape(props.data.song.song)}</TextBoldL>
