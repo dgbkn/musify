@@ -4,11 +4,11 @@
     <style>
       p {
         font-family: system-ui;
-    }
+      }
     </style>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
@@ -46,5 +46,20 @@
     -->
   </body>
 
+  <script>
+    const addMaximumScaleToMetaViewport = () => {
+      const el = document.querySelector("meta[name=viewport]");
+      el.setAttribute(
+        "content",
+        "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
+      );
+    };
 
+    const checkIsIOS = () =>
+      /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+    if (checkIsIOS()) {
+      addMaximumScaleToMetaViewport();
+    }
+  </script>
 </html>

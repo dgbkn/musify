@@ -28,8 +28,24 @@ function Footer(props){
           audioRef.current.play();
         } else {
           audioRef.current.pause();
+          navigator.mediaSession.playbackState = "paused";
         }
     }, [audioRef, props.isPlaying]);
+
+
+
+    useEffect(() => {
+    //    var intervalId = setInterval(function(){
+            if (!audioRef || audioRef.paused){return;}
+           if (!navigator.mediaSession) {return;}
+           if ((duration > 0) === false){return;}
+           navigator.mediaSession.setPositionState({duration: parseInt(duration), playbackRate:audioRef.playbackRate, position: parseInt(currentTime) });
+           navigator.mediaSession.setActionHandler('seekto',(details)=>{handleTrackClick(details.seekTime)});
+    //    }, 300);
+
+    //    return () => clearInterval(intervalId); 
+
+    } , [audioRef, currentTime, duration]);
 
     /*useEffect(() => {
         if (props.isPlaying) {
