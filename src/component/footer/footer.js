@@ -34,6 +34,7 @@ function Footer(props){
 
 
 
+    
     useEffect(() => {
     //    var intervalId = setInterval(function(){
             if (!audioRef || audioRef.paused){return;}
